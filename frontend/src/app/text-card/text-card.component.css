@@ -1,0 +1,16 @@
+.mat-card-header {
+  display: flex;
+}
+
+.mat-button{
+  align-self: flex-start;
+  margin-left: auto;
+}
+
+.header {
+  display: flex;
+}
+
+.mat-card-title {
+  justify-self: flex-start;
+}

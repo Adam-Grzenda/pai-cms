@@ -1,0 +1,9 @@
+<div class="feed-elements">
+  <div class="card" *ngFor="let item of [].constructor(10);">
+    <app-text-card [title]="title" [text]="content" [subtitle]="subtitle"></app-text-card>
+  </div>
+  <div class="card" *ngFor="let item of [].constructor(3);">
+    <app-text-card [title]="title2" [text]="content2" [subtitle]="subtitle2"></app-text-card>
+  </div>
+
+</div>

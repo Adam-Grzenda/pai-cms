@@ -1,0 +1,12 @@
+.feed-elements {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+
+.card {
+  padding: 15px;
+  max-width: 60%;
+  min-width: 30%;
+}
