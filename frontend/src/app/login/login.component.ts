@@ -8,12 +8,14 @@ import {AbstractControl, FormBuilder, ValidationErrors, Validators} from "@angul
 })
 export class LoginComponent implements OnInit {
 
+  login: boolean = false;
+
   registrationForm = this.fb.group(
     {
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(8)]],
-      passwordRepeated: ['', [Validators.required, Validators.minLength(8)]]
-    }, {validator: this.passwordMatching}
+      passwordRepeated: ['', [Validators.required, this.passwordMatching]]
+    }
   );
 
   constructor(private fb: FormBuilder) {

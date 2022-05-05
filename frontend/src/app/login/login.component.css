@@ -1,1 +1,21 @@
+.form-actions {
+  padding-top: 15px;
+  width: 100%;
+  display: grid;
+}
 
+mat-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.mat-card-title {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}
+
+#typeSwitch {
+  margin-left: auto;
+}
