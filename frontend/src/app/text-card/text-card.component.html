@@ -4,7 +4,12 @@
       <mat-card-title>{{title}}</mat-card-title>
       <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
     </div>
-    <button mat-button class=""><mat-icon>share</mat-icon></button>
+
+    <button mat-button id=shared (click)="onClickShare()">
+      <mat-icon *ngIf="isShared">lock_open</mat-icon>
+      <mat-icon *ngIf="!isShared">lock</mat-icon>
+      <mat-icon>share</mat-icon>
+    </button>
   </div>
   <mat-card-content><p>{{text}}</p></mat-card-content>
 </mat-card>

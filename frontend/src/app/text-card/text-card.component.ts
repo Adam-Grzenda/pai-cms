@@ -1,4 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
+import {MatDialog} from "@angular/material/dialog";
+import {ShareDialogComponent} from "../share-dialog/share-dialog.component";
 
 @Component({
   selector: 'app-text-card',
@@ -7,19 +9,32 @@ import {Component, Input, OnInit} from '@angular/core';
 })
 export class TextCardComponent implements OnInit {
   @Input()
+  id: number;
+
+  @Input()
   public title: String;
 
   @Input()
   public subtitle: String;
 
   @Input()
-  public text: String
+  public text: String;
+
+  public isShared: boolean = true;
 
   constructor(
+    private dialog: MatDialog
   ) {
   }
 
   ngOnInit(): void {
   }
 
+  onClickShare(): void {
+    this.dialog.open(ShareDialogComponent, {
+      data: {isShared: this.isShared},
+      minWidth: "30%",
+      minHeight: "30%"
+    })
+  }
 }

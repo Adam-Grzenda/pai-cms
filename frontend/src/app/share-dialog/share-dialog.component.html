@@ -1,0 +1,12 @@
+<span mat-dialog-title>
+  Share your text!
+</span>
+
+<mat-dialog-content>
+  <mat-slide-toggle [(ngModel)]="shareToggled" (toggleChange)="onToggleChange()">
+    Enable sharing
+  </mat-slide-toggle>
+  <mat-form-field>
+    <input matInput readonly disabled="true" [(ngModel)]="publicLink" placeholder="Enable sharing to reveal a public link">
+  </mat-form-field>
+</mat-dialog-content>

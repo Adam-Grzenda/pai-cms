@@ -13,12 +13,14 @@ import {MatButtonModule} from "@angular/material/button";
 import {LoginComponent} from './login/login.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatDividerModule} from "@angular/material/divider";
 import {MatToolbarModule} from "@angular/material/toolbar";
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatDialogModule} from "@angular/material/dialog";
+import { ShareDialogComponent } from './share-dialog/share-dialog.component';
+import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import {MatDialogModule} from "@angular/material/dialog";
     MainFeedComponent,
     TextCardComponent,
     LoginComponent,
-    ToolbarComponent
+    ToolbarComponent,
+    ShareDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -42,7 +45,9 @@ import {MatDialogModule} from "@angular/material/dialog";
     MatDividerModule,
     MatToolbarModule,
     MatMenuModule,
-    MatDialogModule
+    MatDialogModule,
+    MatSlideToggleModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
