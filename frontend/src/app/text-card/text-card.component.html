@@ -5,11 +5,22 @@
       <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
     </div>
 
-    <button *ngIf="isOwner" mat-button id=shared (click)="onClickShare()">
-      <mat-icon *ngIf="isShared">lock_open</mat-icon>
-      <mat-icon *ngIf="!isShared">lock</mat-icon>
-      <mat-icon>share</mat-icon>
-    </button>
+    <div *ngIf="isOwner" id=actions>
+      <button  mat-button (click)="onClickShare()">
+        <mat-icon *ngIf="isShared">lock_open</mat-icon>
+        <mat-icon *ngIf="!isShared">lock</mat-icon>
+        <mat-icon>share</mat-icon>
+      </button>
+      <button mat-button [mat-menu-trigger-for]="menu">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item>Edit</button>
+        <button mat-menu-item>Delete</button>
+      </mat-menu>
+
+    </div>
   </div>
   <mat-card-content><p>{{text}}</p></mat-card-content>
 </mat-card>

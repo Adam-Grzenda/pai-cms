@@ -2,11 +2,6 @@
   display: flex;
 }
 
-.mat-button{
-  align-self: flex-start;
-  margin-left: auto;
-}
-
 .header {
   display: flex;
 }
@@ -18,4 +13,9 @@
 mat-card {
   width: 100%;
   height: 100%;
+}
+
+#actions {
+  align-self: flex-start;
+  margin-left: auto;
 }

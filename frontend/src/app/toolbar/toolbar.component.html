@@ -4,7 +4,6 @@
     <mat-icon>account_circle</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <button mat-menu-item>Settings</button>
     <button *ngIf="!isSignedIn" mat-menu-item (click) = signIn()>Sign in</button>
     <button *ngIf="isSignedIn" mat-menu-item (click) = signOut()>Sign out</button>
   </mat-menu>
