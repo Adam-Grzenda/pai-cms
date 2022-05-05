@@ -1,0 +1,11 @@
+.textContent {
+  width: 80%;
+  height: max-content;
+}
+
+.guestContent {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

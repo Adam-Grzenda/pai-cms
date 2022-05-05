@@ -21,6 +21,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatDialogModule} from "@angular/material/dialog";
 import { ShareDialogComponent } from './share-dialog/share-dialog.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
+import { PublicTextViewComponent } from './public-text-view/public-text-view.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
     TextCardComponent,
     LoginComponent,
     ToolbarComponent,
-    ShareDialogComponent
+    ShareDialogComponent,
+    PublicTextViewComponent
   ],
   imports: [
     BrowserModule,

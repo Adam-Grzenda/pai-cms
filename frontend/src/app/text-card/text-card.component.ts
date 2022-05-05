@@ -22,6 +22,9 @@ export class TextCardComponent implements OnInit {
 
   public isShared: boolean = true;
 
+  @Input()
+  public isOwner: boolean = true;
+
   constructor(
     private dialog: MatDialog
   ) {
