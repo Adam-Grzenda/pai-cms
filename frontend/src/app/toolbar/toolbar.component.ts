@@ -24,8 +24,8 @@ export class ToolbarComponent implements OnInit {
   signIn() {
     this.isSignedIn = true;
     this.dialog.open(LoginComponent, {
-      height: '80%',
-      width: '50%'
+      minWidth: '50%',
+      maxWidth: '60%'
     })
     this.username = "Adam"
   }

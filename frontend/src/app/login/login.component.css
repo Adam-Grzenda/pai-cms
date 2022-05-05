@@ -4,13 +4,13 @@
   display: grid;
 }
 
-mat-card {
+mat-dialog-content {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.mat-card-title {
+.mat-dialog-title {
   width: 100%;
   display: grid;
   justify-items: center;

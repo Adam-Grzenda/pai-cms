@@ -1,5 +1,4 @@
-<mat-card>
-  <mat-card-title>
+  <div matDialogTitle>
     <div id="typeSwitch">
       <button *ngIf=!login mat-button (click)="login=true">Login instead</button>
       <button *ngIf=login mat-button (click)="login=false">Register instead</button>
@@ -9,8 +8,8 @@
       <p *ngIf="!login">Register a new account</p>
       <p *ngIf="login">Login</p>
     </div>
-  </mat-card-title>
-  <mat-card-content>
+  </div>
+  <mat-dialog-content>
     <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
 
       <p>
@@ -42,8 +41,7 @@
 
     <div class="form-actions">
       <button *ngIf=!login mat-button type="submit" [disabled]="!registrationForm.valid">Register</button>
-      <button *ngIf=login mat-button>Sign in</button>
+      <button *ngIf=login mat-button [disabled]="registrationForm.get('password')?.errors!= null || registrationForm.get('email')?.errors!= null">Sign in</button>
     </div>
-  </mat-card-content>
+  </mat-dialog-content>
 
-</mat-card>
