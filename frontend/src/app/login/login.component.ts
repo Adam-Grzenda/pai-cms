@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, ValidationErrors, Validators} from "@angular/forms";
+import {MatBottomSheet} from "@angular/material/bottom-sheet";
+import {ForgotPasswordComponent} from "./forgot-password/forgot-password.component";
 
 @Component({
   selector: 'app-login',
@@ -18,7 +20,8 @@ export class LoginComponent implements OnInit {
     }
   );
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+              private bottomSheet: MatBottomSheet) {
   }
 
   ngOnInit(): void {
@@ -38,5 +41,9 @@ export class LoginComponent implements OnInit {
       return {'noMatch': true};
     } else
       return null;
+  }
+
+  forgotPassword() {
+    this.bottomSheet.open(ForgotPasswordComponent)
   }
 }

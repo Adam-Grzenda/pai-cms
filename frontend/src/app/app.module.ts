@@ -19,9 +19,11 @@ import {MatToolbarModule} from "@angular/material/toolbar";
 import {ToolbarComponent} from './toolbar/toolbar.component';
 import {MatMenuModule} from "@angular/material/menu";
 import {MatDialogModule} from "@angular/material/dialog";
-import { ShareDialogComponent } from './share-dialog/share-dialog.component';
+import {ShareDialogComponent} from './share-dialog/share-dialog.component';
 import {MatSlideToggleModule} from "@angular/material/slide-toggle";
-import { PublicTextViewComponent } from './public-text-view/public-text-view.component';
+import {PublicTextViewComponent} from './public-text-view/public-text-view.component';
+import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
+import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,8 @@ import { PublicTextViewComponent } from './public-text-view/public-text-view.com
     LoginComponent,
     ToolbarComponent,
     ShareDialogComponent,
-    PublicTextViewComponent
+    PublicTextViewComponent,
+    ForgotPasswordComponent
   ],
   imports: [
     BrowserModule,
@@ -49,7 +52,8 @@ import { PublicTextViewComponent } from './public-text-view/public-text-view.com
     MatMenuModule,
     MatDialogModule,
     MatSlideToggleModule,
-    FormsModule
+    FormsModule,
+    MatBottomSheetModule
   ],
   providers: [],
   bootstrap: [AppComponent]
