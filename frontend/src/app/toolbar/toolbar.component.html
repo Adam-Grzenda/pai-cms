@@ -1,9 +1,22 @@
 <mat-toolbar>
-  <button mat-button [matMenuTriggerFor]="menu">
+  <mat-form-field>
+    <input matInput placeholder="Search texts">
+  </mat-form-field>
+  <button mat-button [mat-menu-trigger-for]="filterMenu">
+    <mat-icon>filter_alt</mat-icon>
+  </button>
+  <mat-menu #filterMenu="matMenu">
+    <button mat-menu-item>sort</button>
+  </mat-menu>
+
+  <button mat-button>
+    <mat-icon>add</mat-icon>
+  </button>
+  <button mat-button [matMenuTriggerFor]="userMenu" id="menuButton">
     <span>Hello {{username}}!</span>
     <mat-icon>account_circle</mat-icon>
   </button>
-  <mat-menu #menu="matMenu">
+  <mat-menu #userMenu="matMenu">
     <button *ngIf="!isSignedIn" mat-menu-item (click) = signIn()>Sign in</button>
     <button *ngIf="isSignedIn" mat-menu-item (click) = signOut()>Sign out</button>
   </mat-menu>
