@@ -11,6 +11,7 @@ import pl.put.cmsbackend.auth.user.role.Role;
 import pl.put.cmsbackend.auth.user.role.RoleService;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +24,10 @@ public class AppUserService implements UserDetailsService {
     public AppUser registerUser(String email, String password) {
         Role role = roleService.getDefaultRole();
         return appUserRepository.save(new AppUser(email, passwordEncoder.encode(password), List.of(role)));
+    }
+
+    public Optional<AppUser> findUserByEmail(String email) {
+        return this.appUserRepository.findUserByEmail(email);
     }
 
 

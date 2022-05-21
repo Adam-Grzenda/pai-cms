@@ -1,5 +1,7 @@
 package pl.put.cmsbackend.auth.config;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,11 +18,13 @@ public class EncryptionConfig {
     private final Long refreshTokenExpirationMillis;
     private final Algorithm algorithm;
     private final PasswordEncoder passwordEncoder;
+    private final JWTVerifier jwtVerifier;
 
     public EncryptionConfig(String secret, Long accessTokenExpirationMillis, Long refreshTokenExpirationMillis) {
         this.accessTokenExpirationMillis = accessTokenExpirationMillis;
         this.refreshTokenExpirationMillis = refreshTokenExpirationMillis;
         this.algorithm = Algorithm.HMAC256(secret);
+        this.jwtVerifier = JWT.require(algorithm).build();
         this.passwordEncoder = new BCryptPasswordEncoder();
     }
 

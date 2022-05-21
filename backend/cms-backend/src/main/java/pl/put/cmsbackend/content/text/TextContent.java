@@ -1,6 +1,7 @@
 package pl.put.cmsbackend.content.text;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.put.cmsbackend.auth.user.AppUser;
 import pl.put.cmsbackend.content.shared.SharedContent;
@@ -10,6 +11,7 @@ import javax.persistence.*;
 @Entity
 @Getter
 @Setter
+@NoArgsConstructor
 public class TextContent {
 
     @Id
@@ -33,4 +35,11 @@ public class TextContent {
     private String subtitle;
 
     private String content;
+
+    public TextContent(AppUser owner, String title, String subtitle, String content) {
+        this.owner = owner;
+        this.title = title;
+        this.subtitle = subtitle;
+        this.content = content;
+    }
 }

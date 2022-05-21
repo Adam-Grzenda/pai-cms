@@ -6,6 +6,8 @@ import pl.put.cmsbackend.auth.token.AuthTokens;
 import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.auth.user.AppUserService;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
@@ -22,9 +24,9 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public AuthTokens refreshTokens(@RequestHeader("Authorization") String refreshToken) {
-        return tokenService.refreshTokens(refreshToken);
+    public AuthTokens refreshTokens(@RequestHeader("Authorization") String authorizationHeader,
+                                    HttpServletRequest request) {
+        return tokenService.refreshTokens(authorizationHeader, request.getRequestURI());
     }
-
 
 }
