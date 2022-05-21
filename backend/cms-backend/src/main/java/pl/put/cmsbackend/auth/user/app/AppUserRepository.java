@@ -1,4 +1,4 @@
-package pl.put.cmsbackend.auth.user;
+package pl.put.cmsbackend.auth.user.app;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

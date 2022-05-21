@@ -1,27 +1,20 @@
 package pl.put.cmsbackend.auth.api;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RestController;
 import pl.put.cmsbackend.auth.token.AuthTokens;
 import pl.put.cmsbackend.auth.token.TokenService;
-import pl.put.cmsbackend.auth.user.AppUserService;
 
 import javax.servlet.http.HttpServletRequest;
-
-import static org.springframework.http.HttpStatus.CREATED;
 
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final AppUserService appUserService;
     private final TokenService tokenService;
 
-    @PostMapping("/register")
-    @ResponseStatus(CREATED)
-    public Long registerUser(@RequestParam String email, @RequestParam String password) {
-        return appUserService.registerUser(email, password).getId();
-    }
 
     @PostMapping("/refresh")
     public AuthTokens refreshTokens(@RequestHeader("Authorization") String authorizationHeader,

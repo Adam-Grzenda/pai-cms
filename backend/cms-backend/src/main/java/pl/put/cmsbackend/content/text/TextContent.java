@@ -3,7 +3,7 @@ package pl.put.cmsbackend.content.text;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.put.cmsbackend.auth.user.AppUser;
+import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.content.shared.SharedContent;
 
 import javax.persistence.*;

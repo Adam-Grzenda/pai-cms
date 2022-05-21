@@ -1,4 +1,4 @@
-package pl.put.cmsbackend.auth.user;
+package pl.put.cmsbackend.auth.user.app;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -7,6 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import pl.put.cmsbackend.auth.user.UserRegistrationException;
 import pl.put.cmsbackend.auth.user.role.Role;
 import pl.put.cmsbackend.auth.user.role.RoleService;
 
@@ -23,6 +24,11 @@ public class AppUserService implements UserDetailsService {
 
     public AppUser registerUser(String email, String password) {
         Role role = roleService.getDefaultRole();
+
+        if (appUserRepository.findUserByEmail(email).isPresent()) {
+            throw new UserRegistrationException("User with email: " + email + " already exists");
+        }
+
         return appUserRepository.save(new AppUser(email, passwordEncoder.encode(password), List.of(role)));
     }
 

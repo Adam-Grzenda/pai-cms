@@ -13,4 +13,8 @@ public class ContentControllerExceptionHandler {
         return ResponseEntity.badRequest().body(new ContentErrorResponse(contentException.getMessage()));
     }
 
+    private record ContentErrorResponse(String message) {
+
+    }
+
 }

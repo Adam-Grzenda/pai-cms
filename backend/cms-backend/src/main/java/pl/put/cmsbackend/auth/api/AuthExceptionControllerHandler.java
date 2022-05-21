@@ -29,6 +29,10 @@ public class AuthExceptionControllerHandler extends ResponseEntityExceptionHandl
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new AuthErrorResponse("User not permitted to access resource"));
     }
+
+    private record AuthErrorResponse(String message) {
+
+    }
 }
 
 

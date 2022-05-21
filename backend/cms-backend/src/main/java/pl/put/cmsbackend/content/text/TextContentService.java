@@ -2,8 +2,8 @@ package pl.put.cmsbackend.content.text;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.put.cmsbackend.auth.user.AppUser;
-import pl.put.cmsbackend.auth.user.AppUserService;
+import pl.put.cmsbackend.auth.user.app.AppUser;
+import pl.put.cmsbackend.auth.user.app.AppUserService;
 import pl.put.cmsbackend.auth.user.UserNotFoundException;
 import pl.put.cmsbackend.content.ContentAccessPermissionException;
 import pl.put.cmsbackend.content.shared.SharedContentRepository;

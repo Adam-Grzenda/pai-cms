@@ -1,7 +1,6 @@
 package pl.put.cmsbackend.content.text;
 
 import org.springframework.data.repository.CrudRepository;
-import pl.put.cmsbackend.auth.user.AppUser;
 
 import java.util.List;
 import java.util.Optional;
