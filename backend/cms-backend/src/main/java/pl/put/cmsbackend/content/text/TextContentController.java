@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("user/{id}/text")
+@RequestMapping("user/")
 @RequiredArgsConstructor
 public class TextContentController {
 
     private final TextContentService textContentService;
 
-    @GetMapping
+    @GetMapping("/{id}/text")
     public List<TextContentDto> getAllUserTexts(@PathVariable Long id) {
         return textContentService.findAllByOwnerId(id);
     }

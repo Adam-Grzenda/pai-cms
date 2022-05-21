@@ -19,19 +19,7 @@ public class TextContentService {
                 .stream()
                 .map(content ->
                         new TextContentDto(content.getTitle(), content.getSubtitle(), content.getContent(),
-                                content.isShared() ? getSharedUrl(content.getId()) : null))
+                                content.isShared() ? content.getSharedContent().getHref() : null))
                 .toList();
-    }
-
-    private String getSharedUrl(Long contentId) {
-        return sharedContentRepository.findByContentIdAndActiveTrue(contentId).orElseGet(() -> createSharedContent(contentId)).getHref();
-    }
-
-    private SharedContent createSharedContent(Long contentId) {
-        var sharedContent = new SharedContent();
-        sharedContent.setContentId(contentId);
-        sharedContent.setHref("shared/" + contentId);
-        sharedContent.setActive(true);
-        return sharedContentRepository.save(sharedContent);
     }
 }

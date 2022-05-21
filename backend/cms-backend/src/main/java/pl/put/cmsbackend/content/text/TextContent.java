@@ -2,6 +2,8 @@ package pl.put.cmsbackend.content.text;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.put.cmsbackend.auth.user.AppUser;
+import pl.put.cmsbackend.content.shared.SharedContent;
 
 import javax.persistence.*;
 
@@ -9,15 +11,25 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class TextContent {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    private Long ownerId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private AppUser owner;
+
     private boolean shared;
 
+    @OneToOne
+    private SharedContent sharedContent;
+
+
+    @Column(unique = true)
     private String title;
+
     private String subtitle;
 
     private String content;

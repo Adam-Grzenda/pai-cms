@@ -1,34 +1,19 @@
 package pl.put.cmsbackend.db;
 
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.ConstructorBinding;
 
-import javax.sql.DataSource;
-
-@Configuration
+@ConstructorBinding
+@ConfigurationProperties(prefix = "postgres", ignoreUnknownFields = false)
+@RequiredArgsConstructor
+@Getter
 public class PostgresConfig {
-    @Value("${postgres.url}")
-    private String jdbcUrl;
 
-    @Value("${postgres.username}")
-    private String username;
+    private final String url;
+    private final String username;
+    private final String password;
+    private final String driver;
 
-    @Value("${postgres.password}")
-    private String password;
-
-    @Value("${postgres.driver}")
-    private String postgresDriver;
-
-
-    @Bean
-    public DataSource postgresDataSource() {
-        DriverManagerDataSource dataSource = new DriverManagerDataSource();
-        dataSource.setDriverClassName(postgresDriver);
-        dataSource.setUsername(username);
-        dataSource.setPassword(password);
-        dataSource.setUrl(jdbcUrl);
-        return dataSource;
-    }
 }
