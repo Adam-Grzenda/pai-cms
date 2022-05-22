@@ -23,7 +23,6 @@ public class TextContentService {
         validateContent(email, textContent, user);
 
         TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content());
-
         TextContent savedContent = contentRepository.save(content);
 
         return new TextContentDto(savedContent.getTitle(), savedContent.getSubtitle(), savedContent.getContent());
@@ -50,5 +49,12 @@ public class TextContentService {
         if (!user.getId().equals(ownerId)) {
             throw new ContentAccessPermissionException();
         }
+    }
+
+    public void deleteTextContent(String requestingUserEmail, Long id) {
+        TextContent content = contentRepository.findById(id).orElseThrow(() -> new TextContentNotFound(id));
+
+        checkSameUser(requestingUserEmail, content.getOwner().getId());
+        contentRepository.deleteById(id);
     }
 }
