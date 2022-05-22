@@ -1,6 +1,8 @@
 package pl.put.cmsbackend.auth.token;
 
 import com.auth0.jwt.JWT;
+import com.auth0.jwt.JWTVerifier;
+import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +50,16 @@ public class TokenService {
 
     }
 
+    public String generateForgottenPasswordToken(AppUser user, String issuer) {
+        long currentTimeMillis = System.currentTimeMillis();
+        Algorithm resetPasswordAlgorithm = Algorithm.HMAC256(user.getPassword());
+
+        return JWT.create()
+                .withSubject(user.getEmail())
+                .withExpiresAt(new Date(currentTimeMillis + encryptionConfig.getAccessTokenExpirationMillis()))
+                .withIssuer(issuer)
+                .sign(resetPasswordAlgorithm);
+    }
 
     public UsernamePasswordAuthenticationToken getAuthenticationTokenFromAuthorizationHeader(
             String authorizationHeader) {
@@ -65,6 +77,7 @@ public class TokenService {
 
     }
 
+
     private AuthTokens createTokens(String subject, List<String> authorities, String issuer) {
         long currentTimeMillis = System.currentTimeMillis();
 
@@ -73,14 +86,14 @@ public class TokenService {
                 .withExpiresAt(new Date(currentTimeMillis + encryptionConfig.getAccessTokenExpirationMillis()))
                 .withIssuer(issuer)
                 .withClaim(ROLE_CLAIM, authorities)
-                .sign(encryptionConfig.getAlgorithm());
+                .sign(encryptionConfig.getAuthTokenAlgorithm());
 
 
         String refreshToken = JWT.create()
                 .withSubject(subject)
                 .withExpiresAt(new Date(currentTimeMillis + encryptionConfig.getRefreshTokenExpirationMillis()))
                 .withIssuer(issuer)
-                .sign(encryptionConfig.getAlgorithm());
+                .sign(encryptionConfig.getAuthTokenAlgorithm());
 
         return new AuthTokens(accessToken, refreshToken);
     }
@@ -95,12 +108,13 @@ public class TokenService {
         String JWT = authorizationHeader.substring(7);
 
         try {
-            return encryptionConfig.getJwtVerifier().verify(JWT);
+            return encryptionConfig.getAuthTokenVerifier().verify(JWT);
         } catch (JWTVerificationException e) {
             log.error("Invalid JWT: {}", e.getMessage());
             throw new InvalidAuthenticationTokenException();
         }
     }
+
 
     private AppUser retrieveAppUser(DecodedJWT decodedJWT) {
         return appUserService.findUserByEmail(decodedJWT.getSubject())
@@ -113,4 +127,22 @@ public class TokenService {
     }
 
 
+    public void validateResetPasswordToken(AppUser user, String token, String expectedIssuer) {
+        Algorithm resetPasswordAlgorithm = Algorithm.HMAC256(user.getPassword());
+        JWTVerifier verifier = JWT.require(resetPasswordAlgorithm).withIssuer(expectedIssuer).build();
+
+        try {
+            DecodedJWT decodedToken = verifier.verify(token);
+            if (!user.getEmail().equals(decodedToken.getSubject())) {
+                throw new InvalidAuthenticationTokenException();
+            }
+
+        } catch (JWTVerificationException e) {
+            throw new InvalidAuthenticationTokenException();
+        }
+
+
+
+
+    }
 }

@@ -16,16 +16,20 @@ public class EncryptionConfig {
 
     private final Long accessTokenExpirationMillis;
     private final Long refreshTokenExpirationMillis;
-    private final Algorithm algorithm;
+    private final Algorithm authTokenAlgorithm;
     private final PasswordEncoder passwordEncoder;
-    private final JWTVerifier jwtVerifier;
+    private final JWTVerifier authTokenVerifier;
 
-    public EncryptionConfig(String secret, Long accessTokenExpirationMillis, Long refreshTokenExpirationMillis) {
+    private final Long resetPasswordTokenExpirationMillis;
+
+    public EncryptionConfig(String secret, Long accessTokenExpirationMillis, Long refreshTokenExpirationMillis,
+                            Long resetPasswordTokenExpirationMillis) {
         this.accessTokenExpirationMillis = accessTokenExpirationMillis;
         this.refreshTokenExpirationMillis = refreshTokenExpirationMillis;
-        this.algorithm = Algorithm.HMAC256(secret);
-        this.jwtVerifier = JWT.require(algorithm).build();
+        this.authTokenAlgorithm = Algorithm.HMAC256(secret);
+        this.authTokenVerifier = JWT.require(authTokenAlgorithm).build();
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.resetPasswordTokenExpirationMillis = resetPasswordTokenExpirationMillis;
     }
 
 }

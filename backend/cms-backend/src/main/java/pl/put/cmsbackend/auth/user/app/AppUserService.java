@@ -22,7 +22,7 @@ public class AppUserService implements UserDetailsService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public AppUser registerUser(String email, String password) {
+    public AppUser registerUser(String email, String password) {    //TODO add password validation
         Role role = roleService.getDefaultRole();
 
         if (appUserRepository.findUserByEmail(email).isPresent()) {
