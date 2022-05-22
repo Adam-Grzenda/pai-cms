@@ -30,19 +30,20 @@
           </mat-error>
         </mat-form-field>
       </p>
+      <mat-divider></mat-divider>
+
+      <div class="form-actions">
+        <button *ngIf=!login mat-button type="submit" [disabled]="!registrationForm.valid">Register</button>
+        <button *ngIf=login mat-button type="submit" [disabled]="registrationForm.get('password')?.errors!= null || registrationForm.get('email')?.errors!= null">Sign in</button>
+
+        <div id="typeSwitch">
+          <button *ngIf=!login mat-button (click)="login=true">Already have an account?</button>
+          <button *ngIf=login mat-button (click)="forgotPassword()">Forgot your password?</button>
+          <button *ngIf=login mat-button (click)="login=false">New user?</button>
+        </div>
+      </div>
     </form>
 
-    <mat-divider></mat-divider>
 
-    <div class="form-actions">
-      <button *ngIf=!login mat-button type="submit" [disabled]="!registrationForm.valid">Register</button>
-      <button *ngIf=login mat-button [disabled]="registrationForm.get('password')?.errors!= null || registrationForm.get('email')?.errors!= null">Sign in</button>
-
-      <div id="typeSwitch">
-        <button *ngIf=!login mat-button (click)="login=true">Already have an account?</button>
-        <button *ngIf=login mat-button (click)="forgotPassword()">Forgot your password?</button>
-        <button *ngIf=login mat-button (click)="login=false">New user?</button>
-      </div>
-    </div>
   </mat-dialog-content>
 

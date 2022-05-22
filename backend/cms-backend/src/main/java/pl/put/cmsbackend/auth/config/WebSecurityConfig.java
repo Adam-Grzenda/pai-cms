@@ -13,9 +13,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import pl.put.cmsbackend.auth.filter.JwtTokenProviderFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import pl.put.cmsbackend.auth.filter.JwtAuthenticationFilter;
+import pl.put.cmsbackend.auth.filter.JwtTokenProviderFilter;
 import pl.put.cmsbackend.auth.token.TokenService;
+
+import java.util.List;
 
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
@@ -42,6 +45,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        CorsConfiguration corsConfiguration = getCorsConfiguration();
+        http.cors().configurationSource(request -> corsConfiguration);
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
@@ -54,6 +59,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.addFilter(new JwtTokenProviderFilter(super.authenticationManagerBean(), tokenService, objectMapper));
         http.addFilterBefore(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
+    }
+
+    private CorsConfiguration getCorsConfiguration() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
+        corsConfiguration.setAllowedMethods(
+                List.of("GET", "POST", "PUT", "DELETE", "PUT", "OPTIONS", "PATCH", "DELETE"));
+        corsConfiguration.setAllowedOriginPatterns(List.of(CorsConfiguration.ALL)); //todo - add configuration
+        return corsConfiguration;
     }
 
 

@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
-import {LoginComponent} from "../login/login.component";
+import {LoginComponent} from "../auth/login/login.component";
 
 @Component({
   selector: 'app-toolbar',
