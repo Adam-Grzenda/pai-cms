@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import pl.put.cmsbackend.auth.filter.JwtTokenProviderFilter;
 import pl.put.cmsbackend.auth.filter.JwtAuthenticationFilter;
-import pl.put.cmsbackend.auth.filter.JwtAuthorizationFilter;
 import pl.put.cmsbackend.auth.token.TokenService;
 
 import static org.springframework.http.HttpMethod.GET;
@@ -51,8 +51,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
         http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
 
-        http.addFilter(new JwtAuthenticationFilter(super.authenticationManagerBean(), tokenService, objectMapper));
-        http.addFilterBefore(new JwtAuthorizationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
+        http.addFilter(new JwtTokenProviderFilter(super.authenticationManagerBean(), tokenService, objectMapper));
+        http.addFilterBefore(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
 
     }
 

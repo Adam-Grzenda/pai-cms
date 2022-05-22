@@ -9,10 +9,9 @@ import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserRepository;
 import pl.put.cmsbackend.auth.user.exception.InvalidIssuerException;
-import pl.put.cmsbackend.notification.NotificationRequest;
-import pl.put.cmsbackend.notification.NotificationService;
-import pl.put.cmsbackend.notification.NotificationType;
 import pl.put.cmsbackend.notification.email.EmailNotification;
+import pl.put.cmsbackend.notification.request.NotificationRequest;
+import pl.put.cmsbackend.notification.request.NotificationRequestPublisher;
 
 import java.util.Map;
 
@@ -25,10 +24,10 @@ public class ForgottenPasswordService {
     private static final String TOKEN = "token";
     private static final String EXPECTED_ISSUER = "/forgot-password/";
 
-    private final NotificationService notificationService;
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
+    private final NotificationRequestPublisher notificationRequestPublisher;
 
     @Value("${mail.template.forgottenPassword}")
     private String forgottenPasswordTemplate;
@@ -52,11 +51,11 @@ public class ForgottenPasswordService {
 
 
         NotificationRequest notificationRequest = NotificationRequest.builder()
-                .notificationType(NotificationType.EMAIL)
+                .notificationType(NotificationRequest.NotificationType.EMAIL)
                 .notification(forgottenPasswordNotification)
                 .build();
 
-        notificationService.sendNotification(notificationRequest);
+        notificationRequestPublisher.publishRequest(notificationRequest);
     }
 
     public void handleResetPassword(PasswordResetDto passwordResetDto, String token) {

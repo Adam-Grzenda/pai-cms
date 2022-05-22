@@ -7,9 +7,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
-import pl.put.cmsbackend.notification.NotificationRequest;
+import pl.put.cmsbackend.notification.request.NotificationRequest;
 import pl.put.cmsbackend.notification.NotificationService;
-import pl.put.cmsbackend.notification.NotificationType;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -26,7 +25,7 @@ public class EmailNotificationService implements NotificationService {
 
     @Override
     public void sendNotification(NotificationRequest request) {
-        if (request.getNotificationType() == NotificationType.EMAIL && request.getNotification() instanceof EmailNotification emailNotification) {
+        if (request.getNotificationType() == NotificationRequest.NotificationType.EMAIL && request.getNotification() instanceof EmailNotification emailNotification) {
             sendEmailNotification(emailNotification);
         } else {
             throw new UnsupportedOperationException();
