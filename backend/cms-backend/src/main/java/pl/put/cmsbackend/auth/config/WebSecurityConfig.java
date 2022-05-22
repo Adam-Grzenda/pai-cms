@@ -50,9 +50,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.authorizeRequests().antMatchers("/api/**").authenticated();
         http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
         http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
-//        http.authorizeRequests().antMatchers("/login", "/register", "/refresh").permitAll();
-
-//        http.authorizeRequests().anyRequest().authenticated();
 
         http.addFilter(new JwtAuthenticationFilter(super.authenticationManagerBean(), tokenService, objectMapper));
         http.addFilterBefore(new JwtAuthorizationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
