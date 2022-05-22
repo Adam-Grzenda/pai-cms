@@ -3,6 +3,7 @@ package pl.put.cmsbackend.auth.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -10,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import pl.put.cmsbackend.auth.filter.JwtAuthenticationFilter;
 import pl.put.cmsbackend.auth.filter.JwtAuthorizationFilter;
@@ -42,6 +44,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
+        http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+        http.authorizeRequests().antMatchers("/api/**").authenticated();
         http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
         http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
 //        http.authorizeRequests().antMatchers("/login", "/register", "/refresh").permitAll();
