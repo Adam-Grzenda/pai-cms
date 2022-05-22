@@ -13,7 +13,7 @@ import pl.put.cmsbackend.content.text.TextContentService;
 @RestController
 @RequestMapping("/api")
 @RequiredArgsConstructor
-public class TextContentController {
+public class ContentController {
 
     private final TextContentService textContentService;
 
@@ -36,6 +36,13 @@ public class TextContentController {
         String username = (String) authentication.getPrincipal();
         textContentService.deleteTextContent(username, id);
         return ResponseEntity.ok().build();
+    }
+
+    @PutMapping("/texts/{id}")
+    public TextContentDto updateTextContent(@PathVariable Long id, @RequestBody TextContentDto textContentDto,
+                                            Authentication authentication) {
+        String username = (String) authentication.getPrincipal();
+        return textContentService.updateTextContent(username, id, textContentDto);
     }
 
 }

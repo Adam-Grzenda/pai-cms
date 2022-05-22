@@ -4,8 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.put.cmsbackend.content.text.InvalidTextContentException;
-import pl.put.cmsbackend.content.text.TextContentNotFound;
+import pl.put.cmsbackend.content.exception.InvalidTextContentException;
+import pl.put.cmsbackend.content.exception.TextContentNotFound;
 
 @ControllerAdvice
 public class ContentControllerExceptionHandler {

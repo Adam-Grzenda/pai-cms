@@ -1,4 +1,4 @@
-package pl.put.cmsbackend.content.text;
+package pl.put.cmsbackend.content.exception;
 
 public class InvalidTextContentException extends RuntimeException {
 
