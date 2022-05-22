@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import pl.put.cmsbackend.auth.user.UserRegistrationException;
+import pl.put.cmsbackend.auth.user.exception.UserRegistrationException;
 import pl.put.cmsbackend.auth.user.role.Role;
 import pl.put.cmsbackend.auth.user.role.RoleService;
 

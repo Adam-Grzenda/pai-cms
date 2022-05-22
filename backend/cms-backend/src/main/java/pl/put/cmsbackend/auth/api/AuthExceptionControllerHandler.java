@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pl.put.cmsbackend.auth.token.InvalidAuthenticationTokenException;
-import pl.put.cmsbackend.auth.user.UserNotFoundException;
-import pl.put.cmsbackend.content.ContentAccessPermissionException;
+import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
+import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 
 @ControllerAdvice
 public class AuthExceptionControllerHandler extends ResponseEntityExceptionHandler {

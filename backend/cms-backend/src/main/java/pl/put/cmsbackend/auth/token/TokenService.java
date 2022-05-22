@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import pl.put.cmsbackend.auth.config.EncryptionConfig;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserService;
-import pl.put.cmsbackend.auth.user.UserNotFoundException;
+import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
 import pl.put.cmsbackend.auth.user.role.Role;
 
 import java.util.Date;

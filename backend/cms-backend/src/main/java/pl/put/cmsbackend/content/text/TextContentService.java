@@ -4,10 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import pl.put.cmsbackend.auth.user.UserNotFoundException;
+import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserService;
-import pl.put.cmsbackend.content.ContentAccessPermissionException;
+import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 
 @Service
 @RequiredArgsConstructor
