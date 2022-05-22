@@ -1,21 +1,19 @@
 package pl.put.cmsbackend.content.text;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import pl.put.cmsbackend.auth.user.UserNotFoundException;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserService;
-import pl.put.cmsbackend.auth.user.UserNotFoundException;
 import pl.put.cmsbackend.content.ContentAccessPermissionException;
-import pl.put.cmsbackend.content.shared.SharedContentRepository;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class TextContentService {
 
     private final TextContentRepository contentRepository;
-    private final SharedContentRepository sharedContentRepository;
     private final AppUserService appUserService;
 
 
@@ -38,13 +36,11 @@ public class TextContentService {
         }
     }
 
-    public List<TextContentDto> getAllTextContent(String requestingUserEmail, Long ownerId) {
+    public Page<TextContentDto> getTextContentPaginated(String requestingUserEmail, Long ownerId, Pageable pageable) {
         checkSameUser(requestingUserEmail, ownerId);
 
-        return contentRepository.findAllByOwner_id(ownerId)
-                .stream()
-                .map(content -> new TextContentDto(content.getTitle(), content.getSubtitle(), content.getContent()))
-                .toList();
+        return contentRepository.findAllByOwner_id(ownerId, pageable)
+                .map(content -> new TextContentDto(content.getTitle(), content.getSubtitle(), content.getContent()));
     }
 
     private void checkSameUser(String requestingUserEmail, Long ownerId) {
