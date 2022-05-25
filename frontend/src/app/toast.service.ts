@@ -13,4 +13,8 @@ export class ToastService {
   showUnexpectedError() {
     this.toastr.error("Something went wrong!", "Try again later.")
   }
+
+  showError(errorMessage: string) {
+    this.toastr.error("Something went wrong!", errorMessage)
+  }
 }

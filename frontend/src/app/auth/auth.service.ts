@@ -29,7 +29,7 @@ export class AuthService {
   login(email: string, password: string): Observable<AuthServiceResponse> {
     const body = AuthService.createAuthenticationBody(email, password)
 
-    return this.http.post<AuthTokens>(environment.apiUrl + "/login", body.toString(), {headers: this.headers}).pipe(
+    return this.http.post<AuthTokens>(environment.apiHost + "/login", body.toString(), {headers: this.headers}).pipe(
       map((value: AuthTokens) => {
           localStorage.setItem(ACCESS_TOKEN, value.access_token);
           localStorage.setItem(REFRESH_TOKEN, value.refresh_token);
@@ -58,7 +58,7 @@ export class AuthService {
   register(email: string, password: string): Observable<boolean> {
     const body = AuthService.createAuthenticationBody(email, password)
 
-    return this.http.post<any>(environment.apiUrl + "/register", body.toString(), {headers: this.headers}).pipe(
+    return this.http.post<any>(environment.apiHost + "/register", body.toString(), {headers: this.headers}).pipe(
       map((value: AuthTokens) => {
           return true
         }
@@ -70,7 +70,7 @@ export class AuthService {
   forgottenPassword(email: string): Observable<boolean> {
     const forgottenPasswordBody = new HttpParams().append(AuthService.EMAIL_PARAMETER, email);
 
-    return this.http.post<any>(environment.apiUrl + "/forgot-password", forgottenPasswordBody.toString(), {headers: this.headers}).pipe(
+    return this.http.post<any>(environment.apiHost + "/forgot-password", forgottenPasswordBody.toString(), {headers: this.headers}).pipe(
       map((_) => {
           return true
         }

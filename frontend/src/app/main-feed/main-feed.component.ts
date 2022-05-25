@@ -1,4 +1,9 @@
 import {Component, OnInit} from '@angular/core';
+import {AuthService} from "../auth/auth.service";
+import {TextContentService} from "../text/text.service";
+import {TextContent} from "../text/TextContent";
+import {SpinnerService} from "../spinner.service";
+import {ToastService} from "../toast.service";
 
 @Component({
   selector: 'app-main-feed',
@@ -7,8 +12,10 @@ import {Component, OnInit} from '@angular/core';
 })
 export class MainFeedComponent implements OnInit {
 
-  constructor() {
+  constructor(private authService: AuthService, private textContentService: TextContentService, private spinnerService: SpinnerService, private toastService: ToastService) {
   }
+
+  loadedContent: TextContent[];
 
   title: String = "Some random title";
   subtitle: String = "Some random subtitle";
@@ -19,6 +26,22 @@ export class MainFeedComponent implements OnInit {
   content2: String = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque eu dapibus dui. Lorem ipsum dolor sit amet, consectetur adipiscing elit.";
 
   ngOnInit(): void {
+    this.loadTexts()
   }
+
+  loadTexts() {
+    if (this.authService.getCurrentUser().loggedIn) {
+      this.textContentService.getTexts().subscribe(
+        {
+          next: (value => this.loadedContent = value.content),
+          error: (error => {
+            this.toastService.showError("Failed to load content");
+            this.loadedContent = Array<TextContent>()
+          })
+        }
+      )
+    }
+  }
+
 
 }
