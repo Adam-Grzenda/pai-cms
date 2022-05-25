@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {AbstractControl, FormBuilder, ValidationErrors, Validators} from "@angular/forms";
 import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {ForgotPasswordComponent} from "../forgot-password/forgot-password.component";
-import {AuthService, AuthServiceResponse, UserDetails} from "../auth.service";
+import {AuthService, AuthServiceResponse} from "../auth.service";
 import {MatDialogRef} from "@angular/material/dialog";
 
 @Component({
@@ -35,12 +35,11 @@ export class LoginComponent implements OnInit {
     const email: string = this.registrationForm.get("email")?.value
     const password: string = this.registrationForm.get("password")?.value
 
-    console.log(email + " " + password);
     if (this.login) {
       this.authService.login(email, password).subscribe(
         {
           next: (authServiceResponse: AuthServiceResponse) => {
-            if (authServiceResponse.successful) {
+            if (authServiceResponse.loggedIn) {
               this.dialogRef.close();
             } else {
               this.registrationForm.get("password")?.reset()
@@ -52,8 +51,6 @@ export class LoginComponent implements OnInit {
     }
 
 
-    console.warn("not implemented: " + this.registrationForm.value)
-    console.log(this.registrationForm.get("password"))
   }
 
   passwordMatching(control: AbstractControl): ValidationErrors | null {

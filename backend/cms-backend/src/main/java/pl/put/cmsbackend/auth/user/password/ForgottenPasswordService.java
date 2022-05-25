@@ -9,6 +9,7 @@ import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserRepository;
 import pl.put.cmsbackend.auth.user.exception.InvalidIssuerException;
+import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
 import pl.put.cmsbackend.notification.email.EmailNotification;
 import pl.put.cmsbackend.notification.request.NotificationRequest;
 import pl.put.cmsbackend.notification.request.NotificationRequestPublisher;
@@ -22,7 +23,7 @@ public class ForgottenPasswordService {
     private static final String FORGOTTEN_PASSWORD_SUBJECT = "Forgotten Password";
     private static final String USERNAME = "username";
     private static final String TOKEN = "token";
-    private static final String EXPECTED_ISSUER = "/forgot-password/";
+    private static final String EXPECTED_ISSUER = "/forgot-password";
 
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
@@ -38,7 +39,7 @@ public class ForgottenPasswordService {
             throw new InvalidIssuerException();
         }
 
-        AppUser user = appUserRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException(email));
+        AppUser user = appUserRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException(email));
 
         String token = tokenService.generateForgottenPasswordToken(user, issuer);
 

@@ -40,6 +40,15 @@ export class AuthService {
     )
   }
 
+  getCurrentUser(): AuthServiceResponse {
+    const access_token = localStorage.getItem(ACCESS_TOKEN);
+    if (access_token) {
+      return new AuthServiceResponse(true, this.jwtHelper.decodeToken(access_token).sub)
+    } else {
+      return new AuthServiceResponse(false, null);
+    }
+  }
+
   logout() {
     localStorage.removeItem(ACCESS_TOKEN)
     localStorage.removeItem(REFRESH_TOKEN)
@@ -62,11 +71,10 @@ export class AuthService {
     const forgottenPasswordBody = new HttpParams().append(AuthService.EMAIL_PARAMETER, email);
 
     return this.http.post<any>(environment.apiUrl + "/forgot-password", forgottenPasswordBody.toString(), {headers: this.headers}).pipe(
-      map((value: AuthTokens) => {
+      map((_) => {
           return true
         }
-      ),
-      catchError(_ => of(false))
+      )
     )
 
   }
@@ -85,12 +93,9 @@ class AuthTokens {
   refresh_token: string;
 }
 
-export class UserDetails {
-  email: string
-}
 
 export class AuthServiceResponse {
 
-  constructor(public successful: boolean, public userDetails: UserDetails | null = null) {
+  constructor(public loggedIn: boolean, public email: string | null = null) {
   }
 }

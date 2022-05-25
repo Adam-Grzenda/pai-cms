@@ -26,6 +26,8 @@ import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.component';
 import {JwtModule} from "@auth0/angular-jwt";
 import {HttpClientModule} from "@angular/common/http";
+import {ToastrModule} from "ngx-toastr";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -63,7 +65,10 @@ import {HttpClientModule} from "@angular/common/http";
           return localStorage.getItem("access_token")
         }, allowedDomains: ["localhost:8080"]
       }
-    })
+    }),
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

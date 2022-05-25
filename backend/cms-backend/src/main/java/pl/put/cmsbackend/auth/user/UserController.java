@@ -25,7 +25,7 @@ public class UserController {
         return appUserService.registerUser(email, password).getId();
     }
 
-    @PostMapping("/forgot-password/")
+    @PostMapping("/forgot-password")
     @ResponseStatus(OK)
     public void forgotPassword(@RequestParam String email, HttpServletRequest request) {
         forgottenPasswordService.sendForgottenPassword(email, request.getRequestURI());
