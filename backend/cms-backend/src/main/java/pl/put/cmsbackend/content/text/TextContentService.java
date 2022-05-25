@@ -11,6 +11,8 @@ import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 import pl.put.cmsbackend.content.exception.InvalidTextContentException;
 import pl.put.cmsbackend.content.exception.TextContentNotFound;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class TextContentService {
@@ -60,9 +62,10 @@ public class TextContentService {
     }
 
     public TextContentDto updateTextContent(String email, Long id, TextContentDto updateContent) {
-        TextContent content = contentRepository.findById(id).orElseThrow(() -> new TextContentNotFound(id));
+        Optional<TextContent> currentContent = contentRepository.findById(id);
+        currentContent.ifPresent(content -> checkSameUser(email, content.getOwner().getId()));
 
-        checkSameUser(email, content.getOwner().getId());
+        TextContent content = currentContent.orElse(new TextContent());
 
         if (!content.getTitle().equals(updateContent.title())) {
             validateTitle(email, updateContent);
