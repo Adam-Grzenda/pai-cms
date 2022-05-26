@@ -34,15 +34,15 @@ public class TextContentService {
 
     private void validateTitle(String email, TextContentDto textContent) {
         if (contentRepository.findByOwner_EmailAndTitle(email, textContent.title()).isPresent()) {
-            throw new InvalidTextContentException(
-                    "Duplicate title: " + textContent.content() + " is not allowed");
+            throw new InvalidTextContentException("Duplicate title: " + textContent.content() + " is not allowed");
         }
     }
 
-    public Page<TextContentDto> getTextContentPaginated(String requestingUserEmail, Long ownerId, Pageable pageable) {
-        checkSameUser(requestingUserEmail, ownerId);
+    public Page<TextContentDto> getTextContentPaginated(String requestingUserEmail, Pageable pageable) {
+        AppUser user = appUserService.findUserByEmail(requestingUserEmail)
+                .orElseThrow(() -> new UserNotFoundException(requestingUserEmail));
 
-        return contentRepository.findAllByOwner_id(ownerId, pageable).map(this::mapContentToContentDto);
+        return contentRepository.findAllByOwner_id(user.getId(), pageable).map(this::mapContentToContentDto);
     }
 
     private void checkSameUser(String requestingUserEmail, Long ownerId) {
@@ -61,8 +61,9 @@ public class TextContentService {
         contentRepository.deleteById(id);
     }
 
-    public TextContentDto updateTextContent(String email, Long id, TextContentDto updateContent) {
-        Optional<TextContent> currentContent = contentRepository.findById(id);
+    public TextContentDto updateTextContent(String email, TextContentDto updateContent) {
+
+        Optional<TextContent> currentContent = findExistingContent(updateContent);
         currentContent.ifPresent(content -> checkSameUser(email, content.getOwner().getId()));
 
         TextContent content = currentContent.orElse(new TextContent());
@@ -77,6 +78,14 @@ public class TextContentService {
         TextContent savedContent = contentRepository.save(content);
 
         return mapContentToContentDto(savedContent);
+    }
+
+    private Optional<TextContent> findExistingContent(TextContentDto updateContent) {
+        if (updateContent.id() != null) {
+            return contentRepository.findById(updateContent.id());
+        } else {
+            return Optional.empty();
+        }
     }
 
     private TextContentDto mapContentToContentDto(TextContent savedContent) {

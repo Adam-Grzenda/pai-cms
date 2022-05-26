@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
 import {catchError, map} from "rxjs/operators"
@@ -15,6 +15,8 @@ export class AuthService {
 
   private static readonly EMAIL_PARAMETER = "email";
   private static readonly PASSWORD_PARAMETER = "password";
+
+  authEvent: EventEmitter<AuthEventType> = new EventEmitter<AuthEventType>();
 
   private headers = new HttpHeaders(
     {
@@ -33,6 +35,7 @@ export class AuthService {
       map((value: AuthTokens) => {
           localStorage.setItem(ACCESS_TOKEN, value.access_token);
           localStorage.setItem(REFRESH_TOKEN, value.refresh_token);
+          this.authEvent.emit(AuthEventType.LOGIN);
           return new AuthServiceResponse(true, this.jwtHelper.decodeToken(value.access_token).sub)
         }
       ),
@@ -52,6 +55,7 @@ export class AuthService {
   logout() {
     localStorage.removeItem(ACCESS_TOKEN)
     localStorage.removeItem(REFRESH_TOKEN)
+    this.authEvent.emit(AuthEventType.LOGOUT)
   }
 
 
@@ -85,6 +89,11 @@ export class AuthService {
   }
 
 
+}
+
+enum AuthEventType {
+  LOGIN,
+  LOGOUT
 }
 
 

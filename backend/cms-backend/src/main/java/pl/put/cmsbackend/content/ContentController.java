@@ -25,10 +25,9 @@ public class ContentController {
     }
 
     @GetMapping("/texts")
-    public Page<TextContentDto> getAllTextContent(@RequestParam Long userId, Pageable pageable,
-                                                  Authentication authentication) {
+    public Page<TextContentDto> getAllUserTextContent(Pageable pageable, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
-        return textContentService.getTextContentPaginated(username, userId, pageable);
+        return textContentService.getTextContentPaginated(username, pageable);
     }
 
     @DeleteMapping("/texts/{id}")
@@ -38,11 +37,10 @@ public class ContentController {
         return ResponseEntity.ok().build();
     }
 
-    @PutMapping("/texts/{id}")
-    public TextContentDto updateTextContent(@PathVariable Long id, @RequestBody TextContentDto textContentDto,
-                                            Authentication authentication) {
+    @PutMapping("/texts")
+    public TextContentDto updateTextContent(@RequestBody TextContentDto textContentDto, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
-        return textContentService.updateTextContent(username, id, textContentDto);
+        return textContentService.updateTextContent(username, textContentDto);
     }
 
 }

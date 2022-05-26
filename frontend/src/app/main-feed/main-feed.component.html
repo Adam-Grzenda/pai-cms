@@ -1,8 +1,14 @@
-<div class="feed-elements" *ngIf="loadedContent.length > 0">
-  <div class="card" *ngFor="let textContent of loadedContent;">
-    <app-text-card [id]=textContent.id [title]=textContent.title [text]=textContent.content [subtitle]=textContent.subtitle></app-text-card>
+<div class="feed">
+  <mat-progress-spinner [mode]="'indeterminate'" *ngIf="loading"></mat-progress-spinner>
+  <div *ngIf="loadedContent && loadedContent.length > 0">
+    <div class="card"  *ngFor="let textContent of loadedContent;">
+      <app-text-card [id]=textContent.id [title]=textContent.title [text]=textContent.content
+                     [subtitle]=textContent.subtitle></app-text-card>
+    </div>
+  </div>
+
+  <div *ngIf="loadedContent && loadedContent.length == 0">
+    No content found
   </div>
 </div>
-<div>
-  No content found
-</div>
+

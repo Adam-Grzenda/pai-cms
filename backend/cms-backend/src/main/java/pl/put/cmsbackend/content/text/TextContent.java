@@ -34,6 +34,7 @@ public class TextContent {
 
     private String subtitle;
 
+    @Column(columnDefinition = "text")
     private String content;
 
     public TextContent(AppUser owner, String title, String subtitle, String content) {
