@@ -9,7 +9,7 @@
     <button mat-menu-item>sort</button>
   </mat-menu>
 
-  <button mat-button>
+  <button mat-button *ngIf="isSignedIn" (click)="addText()">
     <mat-icon>add</mat-icon>
   </button>
   <button mat-button [matMenuTriggerFor]="userMenu" id="menuButton">

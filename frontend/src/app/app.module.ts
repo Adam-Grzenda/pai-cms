@@ -10,7 +10,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatIconModule} from "@angular/material/icon";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatButtonModule} from "@angular/material/button";
-import {LoginComponent} from './auth/login/login.component';
+import {AccountComponent} from './auth/account/account.component';
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -28,17 +28,21 @@ import {JwtModule} from "@auth0/angular-jwt";
 import {HttpClientModule} from "@angular/common/http";
 import {ToastrModule} from "ngx-toastr";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import { EditDialogComponent } from './text/edit-dialog/edit-dialog.component';
+import { ConfirmDialogComponent } from './text/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     MainFeedComponent,
     TextCardComponent,
-    LoginComponent,
+    AccountComponent,
     ToolbarComponent,
     ShareDialogComponent,
     PublicTextViewComponent,
-    ForgotPasswordComponent
+    ForgotPasswordComponent,
+    EditDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,

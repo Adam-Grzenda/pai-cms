@@ -1,7 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {MatDialog} from "@angular/material/dialog";
-import {LoginComponent} from "../auth/login/login.component";
+import {AccountComponent} from "../auth/account/account.component";
 import {AuthService} from "../auth/auth.service";
+import {EditDialogComponent} from "../text/edit-dialog/edit-dialog.component";
 
 @Component({
   selector: 'app-toolbar',
@@ -29,7 +30,7 @@ export class ToolbarComponent implements OnInit {
   }
 
   signIn() {
-    let dialogRef = this.dialog.open(LoginComponent, {
+    let dialogRef = this.dialog.open(AccountComponent, {
       minWidth: '50%',
       maxWidth: '60%'
     })
@@ -52,5 +53,12 @@ export class ToolbarComponent implements OnInit {
     this.isSignedIn = false;
     this.username = this.GUEST_NAME;
 
+  }
+
+  addText() {
+    let dialogRef = this.dialog.open(EditDialogComponent, {
+      minWidth: '50%',
+      maxWidth: '60%'
+    })
   }
 }

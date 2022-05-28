@@ -1,8 +1,8 @@
 <mat-card class="mat-elevation-z2">
   <div class="header">
     <div>
-      <mat-card-title>{{title}}</mat-card-title>
-      <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
+      <mat-card-title>{{this.textContent.title}}</mat-card-title>
+      <mat-card-subtitle>{{this.textContent.subtitle}}</mat-card-subtitle>
     </div>
 
     <div *ngIf="isOwner" id=actions>
@@ -16,11 +16,11 @@
       </button>
 
       <mat-menu #menu="matMenu">
-        <button mat-menu-item>Edit</button>
-        <button mat-menu-item>Delete</button>
+        <button mat-menu-item (click)="onClickEdit()">Edit</button>
+        <button mat-menu-item (click)="onClickDelete()">Delete</button>
       </mat-menu>
 
     </div>
   </div>
-  <mat-card-content><p>{{text}}</p></mat-card-content>
+  <mat-card-content><p>{{this.textContent.content}}</p></mat-card-content>
 </mat-card>

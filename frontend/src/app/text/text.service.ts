@@ -24,4 +24,8 @@ export class TextContentService {
     return this.http.get<TextContentPage>(environment.contentApiBaseUrl + "/texts", {observe: "body"})
   }
 
+  deleteText(textContent: TextContent): Observable<any> {
+    return this.http.delete<any>(environment.contentApiBaseUrl + "/texts/" + textContent.id);
+  }
+
 }

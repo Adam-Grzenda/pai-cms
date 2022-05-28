@@ -3,3 +3,14 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.form-actions {
+  padding-top: 15px;
+  width: 100%;
+  display: grid;
+}
+
+.mat-dialog-title {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+}

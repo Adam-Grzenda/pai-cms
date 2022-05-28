@@ -1,0 +1,29 @@
+<mat-dialog-content>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <p>
+      <mat-form-field>
+        <mat-label>Title</mat-label>
+        <input matInput formControlName="title" placeholder="Title">
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field>
+        <mat-label>Subtitle</mat-label>
+        <input matInput formControlName="subtitle" placeholder="Subtitle">
+      </mat-form-field>
+    </p>
+    <p>
+      <mat-form-field id="contentEditField" appearance="fill">
+        <mat-label>Content</mat-label>
+        <textarea matInput formControlName="content" placeholder="Content"></textarea>
+      </mat-form-field>
+    </p>
+
+    <div class="form-actions">
+      <button mat-button type="submit" [disabled]="!editForm.valid">Submit changes</button>
+    </div>
+  </form>
+
+
+</mat-dialog-content>
+

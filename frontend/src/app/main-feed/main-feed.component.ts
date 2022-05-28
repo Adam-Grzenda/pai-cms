@@ -51,5 +51,4 @@ export class MainFeedComponent implements OnInit {
     }
   }
 
-
 }

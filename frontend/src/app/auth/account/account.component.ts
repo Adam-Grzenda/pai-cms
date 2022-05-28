@@ -4,13 +4,14 @@ import {MatBottomSheet} from "@angular/material/bottom-sheet";
 import {ForgotPasswordComponent} from "../forgot-password/forgot-password.component";
 import {AuthService, AuthServiceResponse} from "../auth.service";
 import {MatDialogRef} from "@angular/material/dialog";
+import {ToastService} from "../../toast.service";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: 'app-account',
+  templateUrl: './account.component.html',
+  styleUrls: ['./account.component.css']
 })
-export class LoginComponent implements OnInit {
+export class AccountComponent implements OnInit {
 
   login: boolean = true;
 
@@ -25,7 +26,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private bottomSheet: MatBottomSheet,
               private authService: AuthService,
-              private dialogRef: MatDialogRef<LoginComponent>) {
+              private dialogRef: MatDialogRef<AccountComponent>,
+              private toastService: ToastService) {
   }
 
   ngOnInit(): void {
@@ -42,10 +44,20 @@ export class LoginComponent implements OnInit {
             if (authServiceResponse.loggedIn) {
               this.dialogRef.close();
             } else {
-              this.registrationForm.get("password")?.reset()
+              this.registrationForm.get("password")?.reset();
             }
           },
           error: (err => console.log(err))
+        }
+      )
+    } else {
+      this.authService.register(email, password).subscribe(
+        {
+          next: _ => {
+            this.login = true;
+            this.toastService.showSuccess("User registered successfully");
+          },
+          error: _ => this.toastService.showUnexpectedError()
         }
       )
     }
