@@ -16,6 +16,8 @@ import pl.put.cmsbackend.content.text.db.TextContentRepository;
 
 import java.util.Optional;
 
+import static pl.put.cmsbackend.content.text.TextContentMapper.mapContentToContentDto;
+
 @Service
 @RequiredArgsConstructor
 public class TextContentService {
@@ -78,7 +80,8 @@ public class TextContentService {
         AppUser user = appUserService.findUserByEmail(requestingUserEmail)
                 .orElseThrow(() -> new UserNotFoundException(requestingUserEmail));
 
-        return contentRepository.findAllByOwner_id(user.getId(), pageable).map(this::mapContentToContentDto);
+        return contentRepository.findAllByOwner_id(user.getId(), pageable)
+                .map(TextContentMapper::mapContentToContentDto);
     }
 
     private Optional<TextContent> findExistingContent(TextContentDto updateContent) {
@@ -87,10 +90,6 @@ public class TextContentService {
         } else {
             return Optional.empty();
         }
-    }
-
-    private TextContentDto mapContentToContentDto(TextContent savedContent) {
-        return new TextContentDto(savedContent.getId(), savedContent.getTitle(), savedContent.getSubtitle(), savedContent.getContent());
     }
 
 
@@ -108,5 +107,6 @@ public class TextContentService {
             throw new ContentAccessPermissionException();
         }
     }
+
 
 }

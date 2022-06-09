@@ -1,4 +1,4 @@
-package pl.put.cmsbackend.content;
+package pl.put.cmsbackend.content.api;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

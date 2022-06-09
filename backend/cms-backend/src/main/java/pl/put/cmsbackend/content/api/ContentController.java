@@ -1,4 +1,4 @@
-package pl.put.cmsbackend.content;
+package pl.put.cmsbackend.content.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -8,9 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.put.cmsbackend.auth.token.TokenService;
+import pl.put.cmsbackend.content.text.IndexedTextContentService;
 import pl.put.cmsbackend.content.text.TextContentDto;
 import pl.put.cmsbackend.content.text.TextContentService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -19,6 +21,7 @@ import java.util.Optional;
 public class ContentController {
 
     private final TextContentService textContentService;
+    private final IndexedTextContentService indexedTextContentService;
     private final TokenService tokenService;
 
     @PostMapping("/texts")
@@ -67,5 +70,9 @@ public class ContentController {
         }
     }
 
+    @GetMapping("/texts/search")
+    public List<TextContentDto> searchTextContentByKeyword(@RequestParam String keyword, @RequestParam Long userId) {
+        return indexedTextContentService.findTextContentByKeyword(keyword, userId);
+    }
 
 }
