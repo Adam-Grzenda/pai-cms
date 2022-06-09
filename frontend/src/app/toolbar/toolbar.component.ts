@@ -3,6 +3,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {AccountComponent} from "../auth/account/account.component";
 import {AuthService} from "../auth/auth.service";
 import {EditDialogComponent} from "../text/edit-dialog/edit-dialog.component";
+import {ActivatedRoute, Router} from "@angular/router";
 
 @Component({
   selector: 'app-toolbar',
@@ -17,13 +18,15 @@ export class ToolbarComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
   }
 
   ngOnInit(): void {
     let currentUser = this.authService.getCurrentUser();
-    if(currentUser.loggedIn && currentUser.email) {
+    if (currentUser.loggedIn && currentUser.email) {
       this.isSignedIn = true;
       this.username = currentUser.email;
     }
@@ -59,6 +62,18 @@ export class ToolbarComponent implements OnInit {
     let dialogRef = this.dialog.open(EditDialogComponent, {
       minWidth: '50%',
       maxWidth: '60%'
+    })
+  }
+
+  onEnter(event: Event) {
+    let searchKeywords = (event.target as HTMLInputElement).value
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: {
+        search: searchKeywords
+      },
+      queryParamsHandling: "merge",
+      skipLocationChange: false
     })
   }
 }

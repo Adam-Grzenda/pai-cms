@@ -11,6 +11,7 @@ import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
 import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 import pl.put.cmsbackend.content.exception.InvalidTextContentException;
 import pl.put.cmsbackend.content.exception.TextContentNotFound;
+import pl.put.cmsbackend.content.api.TextContentDto;
 import pl.put.cmsbackend.content.text.db.TextContent;
 import pl.put.cmsbackend.content.text.db.TextContentRepository;
 

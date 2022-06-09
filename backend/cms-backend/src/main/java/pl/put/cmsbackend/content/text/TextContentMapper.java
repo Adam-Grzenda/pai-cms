@@ -1,5 +1,6 @@
 package pl.put.cmsbackend.content.text;
 
+import pl.put.cmsbackend.content.api.TextContentDto;
 import pl.put.cmsbackend.content.text.db.TextContent;
 
 public class TextContentMapper {

@@ -1,6 +1,6 @@
 <mat-toolbar>
   <mat-form-field>
-    <input matInput placeholder="Search texts">
+    <input matInput placeholder="Search texts" (keyup.enter)="onEnter($event)">
   </mat-form-field>
   <button mat-button [mat-menu-trigger-for]="filterMenu">
     <mat-icon>filter_alt</mat-icon>

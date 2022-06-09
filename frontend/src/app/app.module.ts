@@ -28,8 +28,13 @@ import {JwtModule} from "@auth0/angular-jwt";
 import {HttpClientModule} from "@angular/common/http";
 import {ToastrModule} from "ngx-toastr";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
-import { EditDialogComponent } from './text/edit-dialog/edit-dialog.component';
-import { ConfirmDialogComponent } from './text/confirm-dialog/confirm-dialog.component';
+import {EditDialogComponent} from './text/edit-dialog/edit-dialog.component';
+import {ConfirmDialogComponent} from './text/confirm-dialog/confirm-dialog.component';
+import {RouterModule, Routes} from "@angular/router";
+
+const routes: Routes = [
+  {path: '', component: MainFeedComponent}
+]
 
 @NgModule({
   declarations: [
@@ -63,6 +68,7 @@ import { ConfirmDialogComponent } from './text/confirm-dialog/confirm-dialog.com
     FormsModule,
     HttpClientModule,
     MatBottomSheetModule,
+    RouterModule.forRoot(routes),
     JwtModule.forRoot({
       config: {
         tokenGetter: () => {
@@ -74,6 +80,7 @@ import { ConfirmDialogComponent } from './text/confirm-dialog/confirm-dialog.com
     ToastrModule.forRoot(),
     MatProgressSpinnerModule
   ],
+  exports: [RouterModule],
   providers: [],
   bootstrap: [AppComponent]
 })

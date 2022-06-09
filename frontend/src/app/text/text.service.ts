@@ -28,4 +28,7 @@ export class TextContentService {
     return this.http.delete<any>(environment.contentApiBaseUrl + "/texts/" + textContent.id);
   }
 
+  getTextsFiltered(searchKeyword: string): Observable<Array<TextContent>> {
+    return this.http.get<Array<TextContent>>(environment.contentApiBaseUrl + "/texts/search?keyword=" + searchKeyword)
+  }
 }

@@ -3,6 +3,7 @@ import {AuthService} from "../auth/auth.service";
 import {TextContentService} from "../text/text.service";
 import {TextContent} from "../text/TextContent";
 import {ToastService} from "../toast.service";
+import {ActivatedRoute} from "@angular/router";
 
 @Component({
   selector: 'app-main-feed',
@@ -11,7 +12,10 @@ import {ToastService} from "../toast.service";
 })
 export class MainFeedComponent implements OnInit {
 
-  constructor(private authService: AuthService, private textContentService: TextContentService, private toastService: ToastService) {
+  constructor(private authService: AuthService,
+              private textContentService: TextContentService,
+              private toastService: ToastService,
+              private route: ActivatedRoute) {
   }
 
   loadedContent: TextContent[];
@@ -23,32 +27,65 @@ export class MainFeedComponent implements OnInit {
 
     this.authService.authEvent.subscribe(
       _ => {
-       this.loadTexts()
+        this.loadTexts()
       }
     )
+
+    this.route.queryParamMap.subscribe(queryParams => {
+      let searchKeyword = queryParams.get("search");
+      if (searchKeyword) {
+        this.loadTexts(searchKeyword)
+      } else {
+        this.loadTexts()
+      }
+    })
+
   }
 
-  loadTexts() {
-    this.loading = true;
 
+  loadTexts(searchKeyword: string = "") {
+    this.loading = true;
     if (this.authService.getCurrentUser().loggedIn) {
-      this.textContentService.getTexts().subscribe(
-        {
-          next: (value => {
-            this.loadedContent = value.content
-            setTimeout(() => {this.loading = false;}, 3000) //todo just for some tests
-          }),
-          error: (error => {
-            this.toastService.showError("Failed to load content");
-            this.loadedContent = Array<TextContent>();
-            this.loading = false;
-          })
-        }
-      )
+      if (searchKeyword != "") {
+        this.loadFiltered(searchKeyword);
+      } else {
+        this.loadUnfiltered();
+      }
     } else {
       this.loadedContent = Array<TextContent>();
       console.error("USER NOT LOGGED IN - NO CONTENT")
     }
   }
 
+  private loadUnfiltered() {
+    this.textContentService.getTexts().subscribe(
+      {
+        next: (value => {
+          this.loadedContent = value.content
+          this.loading = false
+        }),
+        error: (error => {
+          this.toastService.showError("Failed to load content");
+          this.loadedContent = Array<TextContent>();
+          this.loading = false;
+        })
+      }
+    )
+  }
+
+  private loadFiltered(searchKeyword: string) {
+    this.textContentService.getTextsFiltered(searchKeyword).subscribe(
+      {
+        next: (value => {
+          this.loadedContent = value
+          this.loading = false
+        }),
+        error: (error => {
+          this.toastService.showError("Failed to load content");
+          this.loadedContent = Array<TextContent>();
+          this.loading = false;
+        })
+      }
+    )
+  }
 }

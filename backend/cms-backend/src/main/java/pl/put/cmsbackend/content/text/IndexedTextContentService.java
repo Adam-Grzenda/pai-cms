@@ -5,6 +5,7 @@ import org.apache.lucene.search.Query;
 import org.hibernate.search.jpa.Search;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.springframework.stereotype.Service;
+import pl.put.cmsbackend.content.api.TextContentDto;
 import pl.put.cmsbackend.content.text.db.TextContent;
 
 import javax.persistence.EntityManager;

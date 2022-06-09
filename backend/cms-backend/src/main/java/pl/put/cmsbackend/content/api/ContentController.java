@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.content.text.IndexedTextContentService;
-import pl.put.cmsbackend.content.text.TextContentDto;
 import pl.put.cmsbackend.content.text.TextContentService;
 
 import java.util.List;

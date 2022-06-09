@@ -1,4 +1,4 @@
-package pl.put.cmsbackend.content.text;
+package pl.put.cmsbackend.content.api;
 
 import javax.validation.constraints.NotBlank;
 

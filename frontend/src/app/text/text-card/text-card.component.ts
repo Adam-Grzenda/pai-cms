@@ -54,9 +54,11 @@ export class TextCardComponent implements OnInit {
   onClickDelete() {
 
     let dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      minWidth: "30%",
-      minHeight: "30%"
-    })
+        minWidth: "30%",
+        minHeight: "30%",
+        data: "Do your really want to delete this content?"
+      }
+    )
 
     dialogRef.afterClosed().subscribe(
       result => {
