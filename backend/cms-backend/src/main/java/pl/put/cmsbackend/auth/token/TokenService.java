@@ -17,6 +17,7 @@ import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserService;
 import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
 import pl.put.cmsbackend.auth.user.role.Role;
+import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 
 import java.util.Date;
 import java.util.List;
@@ -33,12 +34,14 @@ public class TokenService {
     private final AppUserService appUserService;
 
     public AuthTokens createTokens(User user, String issuer) {
-        return createTokens(user.getUsername(),
-                user.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList(), issuer);
+        return createTokens(user.getUsername(), user.getAuthorities()
+                .stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList(), issuer);
     }
 
     public AuthTokens refreshTokens(String authorizationHeader, String issuer) {
-        DecodedJWT decodedJWT = verifyToken(authorizationHeader);
+        DecodedJWT decodedJWT = verifyAuthorizationHeader(authorizationHeader);
 
         try {
             AppUser user = retrieveAppUser(decodedJWT);
@@ -61,9 +64,8 @@ public class TokenService {
                 .sign(resetPasswordAlgorithm);
     }
 
-    public UsernamePasswordAuthenticationToken getAuthenticationTokenFromAuthorizationHeader(
-            String authorizationHeader) {
-        DecodedJWT decodedJWT = verifyToken(authorizationHeader);
+    public UsernamePasswordAuthenticationToken getAuthenticationTokenFromAuthorizationHeader(String authorizationHeader) {
+        DecodedJWT decodedJWT = verifyAuthorizationHeader(authorizationHeader);
 
         List<String> claims = decodedJWT.getClaim(ROLE_CLAIM).asList(String.class);
 
@@ -76,7 +78,6 @@ public class TokenService {
         }
 
     }
-
 
     private AuthTokens createTokens(String subject, List<String> authorities, String issuer) {
         long currentTimeMillis = System.currentTimeMillis();
@@ -98,7 +99,7 @@ public class TokenService {
         return new AuthTokens(accessToken, refreshToken);
     }
 
-    private DecodedJWT verifyToken(String authorizationHeader) {
+    private DecodedJWT verifyAuthorizationHeader(String authorizationHeader) {
 
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             log.error("Invalid authorization header: {}", authorizationHeader);
@@ -106,7 +107,10 @@ public class TokenService {
         }
 
         String JWT = authorizationHeader.substring(7);
+        return verifyJwt(JWT);
+    }
 
+    private DecodedJWT verifyJwt(String JWT) {
         try {
             return encryptionConfig.getAuthTokenVerifier().verify(JWT);
         } catch (JWTVerificationException e) {
@@ -118,8 +122,7 @@ public class TokenService {
 
     private AppUser retrieveAppUser(DecodedJWT decodedJWT) {
         return appUserService.findUserByEmail(decodedJWT.getSubject())
-                .orElseThrow(
-                        () -> new UserNotFoundException("User with email: " + decodedJWT.getSubject() + "not found"));
+                .orElseThrow(() -> new UserNotFoundException("User with email: " + decodedJWT.getSubject() + "not found"));
     }
 
     private List<String> getAuthorities(AppUser user) {
@@ -127,7 +130,7 @@ public class TokenService {
     }
 
 
-    public void validateResetPasswordToken(AppUser user, String token, String expectedIssuer) {
+    public void verifyResetPasswordToken(AppUser user, String token, String expectedIssuer) {
         Algorithm resetPasswordAlgorithm = Algorithm.HMAC256(user.getPassword());
         JWTVerifier verifier = JWT.require(resetPasswordAlgorithm).withIssuer(expectedIssuer).build();
 
@@ -140,9 +143,14 @@ public class TokenService {
         } catch (JWTVerificationException e) {
             throw new InvalidAuthenticationTokenException();
         }
+    }
 
+    public void verifyContentToken(String token, Long contentId) {
+        DecodedJWT decodedJWT = verifyJwt(token);
 
-
+        if (!decodedJWT.getSubject().equals(contentId.toString())) {
+            throw new ContentAccessPermissionException();
+        }
 
     }
 }

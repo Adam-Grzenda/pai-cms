@@ -1,10 +1,9 @@
-package pl.put.cmsbackend.content.text;
+package pl.put.cmsbackend.content.text.db;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.put.cmsbackend.auth.user.app.AppUser;
-import pl.put.cmsbackend.content.shared.SharedContent;
 
 import javax.persistence.*;
 
@@ -23,13 +22,8 @@ public class TextContent {
     @JoinColumn(name = "owner_id")
     private AppUser owner;
 
-    private boolean shared;
+    private boolean shared = false;
 
-    @OneToOne
-    private SharedContent sharedContent;
-
-
-    @Column(unique = true)
     private String title;
 
     private String subtitle;

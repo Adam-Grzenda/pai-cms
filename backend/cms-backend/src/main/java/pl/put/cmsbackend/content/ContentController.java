@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.content.text.TextContentDto;
 import pl.put.cmsbackend.content.text.TextContentService;
 
@@ -16,12 +16,13 @@ import pl.put.cmsbackend.content.text.TextContentService;
 public class ContentController {
 
     private final TextContentService textContentService;
+    private final TokenService tokenService;
 
     @PostMapping("/texts")
     @ResponseStatus(HttpStatus.CREATED)
     public TextContentDto addTextContent(@RequestBody TextContentDto textContent, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
-        return textContentService.addUserTextContent(username, textContent);
+        return textContentService.addTextContent(username, textContent);
     }
 
     @GetMapping("/texts")
@@ -30,11 +31,18 @@ public class ContentController {
         return textContentService.getTextContentPaginated(username, pageable);
     }
 
+    @GetMapping("/texts/{id}")
+    public TextContentDto getPublicTextById(@PathVariable Long id, @RequestParam String token) {
+        tokenService.verifyContentToken(token, id);
+        return textContentService.getPublicTextById(id);
+    }
+
+
     @DeleteMapping("/texts/{id}")
-    public ResponseEntity<?> getTextContentById(@PathVariable Long id, Authentication authentication) {
+    @ResponseStatus(HttpStatus.OK)
+    public void deleteTextContentById(@PathVariable Long id, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
         textContentService.deleteTextContent(username, id);
-        return ResponseEntity.ok().build();
     }
 
     @PutMapping("/texts")
@@ -42,5 +50,13 @@ public class ContentController {
         String username = (String) authentication.getPrincipal();
         return textContentService.updateTextContent(username, textContentDto);
     }
+
+    @PostMapping("/texts/{id}/share")
+    @ResponseStatus(HttpStatus.OK)
+    public void shareContent(@PathVariable Long id, @RequestParam Boolean share, Authentication authentication) {
+        String username = (String) authentication.getPrincipal();
+        textContentService.changeContentSharedStatus(id, username, share);
+    }
+
 
 }
