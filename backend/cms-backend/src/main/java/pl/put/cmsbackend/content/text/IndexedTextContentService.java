@@ -15,7 +15,7 @@ import java.util.List;
 public class IndexedTextContentService {
     private final EntityManager entityManager;
 
-    public List<TextContentDto> findTextContentByKeyword(String keyword, Long ownerId) {
+    public List<TextContentDto> findTextContentByKeyword(String keyword, String username) {
         var fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
         QueryBuilder queryBuilder = fullTextEntityManager.getSearchFactory()
                 .buildQueryBuilder()
@@ -33,7 +33,7 @@ public class IndexedTextContentService {
 
 
         return results.stream()
-                .filter(item -> item.getOwner().getId().equals(ownerId)) //TODO - filter before lucene to avoid n+1
+                .filter(item -> item.getOwner().getEmail().equals(username)) //TODO - filter before lucene to avoid n+1
                 .map(TextContentMapper::mapContentToContentDto)
                 .toList();
     }

@@ -71,8 +71,9 @@ public class ContentController {
     }
 
     @GetMapping("/texts/search")
-    public List<TextContentDto> searchTextContentByKeyword(@RequestParam String keyword, @RequestParam Long userId) {
-        return indexedTextContentService.findTextContentByKeyword(keyword, userId);
+    public List<TextContentDto> searchTextContentByKeyword(@RequestParam String keyword, Authentication authentication) {
+        String username = (String) authentication.getPrincipal();
+        return indexedTextContentService.findTextContentByKeyword(keyword, username);
     }
 
 }
