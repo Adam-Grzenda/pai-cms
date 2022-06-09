@@ -13,20 +13,20 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ConfigurationProperties(prefix = "jwt", ignoreUnknownFields = false)
 @Getter
 public class EncryptionConfig {
-
     private final Long accessTokenExpirationMillis;
     private final Long refreshTokenExpirationMillis;
     private final Algorithm authTokenAlgorithm;
     private final PasswordEncoder passwordEncoder;
     private final JWTVerifier authTokenVerifier;
+    private final Long maxShareContentTokenValidDays;
 
     private final Long resetPasswordTokenExpirationMillis;
 
-    public EncryptionConfig(String secret, Long accessTokenExpirationMillis, Long refreshTokenExpirationMillis,
-                            Long resetPasswordTokenExpirationMillis) {
+    public EncryptionConfig(String secret, Long accessTokenExpirationMillis, Long refreshTokenExpirationMillis, Long maxShareContentTokenValidDays, Long resetPasswordTokenExpirationMillis) {
         this.accessTokenExpirationMillis = accessTokenExpirationMillis;
         this.refreshTokenExpirationMillis = refreshTokenExpirationMillis;
         this.authTokenAlgorithm = Algorithm.HMAC256(secret);
+        this.maxShareContentTokenValidDays = maxShareContentTokenValidDays;
         this.authTokenVerifier = JWT.require(authTokenAlgorithm).build();
         this.passwordEncoder = new BCryptPasswordEncoder();
         this.resetPasswordTokenExpirationMillis = resetPasswordTokenExpirationMillis;

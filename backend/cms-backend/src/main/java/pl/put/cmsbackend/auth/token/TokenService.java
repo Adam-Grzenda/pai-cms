@@ -19,8 +19,10 @@ import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
 import pl.put.cmsbackend.auth.user.role.Role;
 import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static pl.put.cmsbackend.auth.config.WebSecurityConfig.ROLE_CLAIM;
 
@@ -145,12 +147,26 @@ public class TokenService {
         }
     }
 
-    public void verifyContentToken(String token, Long contentId) {
+    public void verifyContentToken(String token, @NotNull Long contentId) {
         DecodedJWT decodedJWT = verifyJwt(token);
 
         if (!decodedJWT.getSubject().equals(contentId.toString())) {
             throw new ContentAccessPermissionException();
         }
 
+    }
+
+    public String generateContentToken(@NotNull Long contentId, Long validForDays) {
+        if (validForDays > encryptionConfig.getMaxShareContentTokenValidDays()) {
+            throw new ContentAccessPermissionException("Token validity exceeds maximum");
+        }
+
+        long currentTimeMillis = System.currentTimeMillis();
+
+        return JWT.create()
+                .withSubject(contentId.toString())
+                .withExpiresAt(new Date(currentTimeMillis + TimeUnit.DAYS.toMillis(validForDays)))
+                .withIssuer("/share")
+                .sign(encryptionConfig.getAuthTokenAlgorithm());
     }
 }

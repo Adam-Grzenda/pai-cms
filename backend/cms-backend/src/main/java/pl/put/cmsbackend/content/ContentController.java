@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.content.text.TextContentDto;
 import pl.put.cmsbackend.content.text.TextContentService;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api")
@@ -53,9 +56,15 @@ public class ContentController {
 
     @PostMapping("/texts/{id}/share")
     @ResponseStatus(HttpStatus.OK)
-    public void shareContent(@PathVariable Long id, @RequestParam Boolean share, Authentication authentication) {
+    public ResponseEntity<Optional<String>> shareContent(@PathVariable Long id, @RequestParam Boolean share, @RequestParam(defaultValue = "5") Long validForDays, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
         textContentService.changeContentSharedStatus(id, username, share);
+        if (share) {
+            String contentToken = tokenService.generateContentToken(id, validForDays);
+            return ResponseEntity.ok(Optional.of(contentToken));
+        } else {
+            return ResponseEntity.ok(Optional.empty());
+        }
     }
 
 
