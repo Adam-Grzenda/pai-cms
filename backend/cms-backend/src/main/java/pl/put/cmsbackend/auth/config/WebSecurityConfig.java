@@ -33,12 +33,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String PASSWORD_PARAMETER = "password";
     public static final String DEFAULT_ROLE = "USER";
     public static final String LOGIN_URI = "/login";
+    public static final String API_BASE = "/api/**";
 
     private final UserDetailsService userService;
     private final PasswordEncoder passwordEncoder;
     private final TokenService tokenService;
     private final ObjectMapper objectMapper;
 
+    @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder);
     }
@@ -52,9 +54,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
         http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
-        http.authorizeRequests().antMatchers("/api/**").authenticated();
-        http.authorizeRequests().antMatchers(POST, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
-        http.authorizeRequests().antMatchers(GET, "/api/**").hasAnyAuthority(DEFAULT_ROLE);
+        http.authorizeRequests().antMatchers(API_BASE).authenticated();
+        http.authorizeRequests().antMatchers(POST, API_BASE).hasAnyAuthority(DEFAULT_ROLE);
+        http.authorizeRequests().antMatchers(GET, API_BASE).hasAnyAuthority(DEFAULT_ROLE);
 
         http.addFilter(new JwtTokenProviderFilter(super.authenticationManagerBean(), tokenService, objectMapper));
         http.addFilterBefore(new JwtAuthenticationFilter(tokenService), UsernamePasswordAuthenticationFilter.class);
