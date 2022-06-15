@@ -1,4 +1,4 @@
-import {Injectable} from '@angular/core';
+import {EventEmitter, Injectable} from '@angular/core';
 import {TextContent} from "./TextContent";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../environments/environment";
@@ -8,6 +8,8 @@ import {Observable} from "rxjs";
   providedIn: 'root'
 })
 export class TextContentService {
+
+  textContentEvent: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(private http: HttpClient) {
   }

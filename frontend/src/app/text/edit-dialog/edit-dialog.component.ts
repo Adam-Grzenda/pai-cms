@@ -14,7 +14,7 @@ import {MatChip, MatChipList} from "@angular/material/chips";
 export class EditDialogComponent implements OnInit {
 
   availableTags: string[];
-  selectedTags: string[];
+  selectedTags: string[] = new Array<string>();
 
   @ViewChild("chipList")
   chipList: MatChipList
@@ -71,14 +71,20 @@ export class EditDialogComponent implements OnInit {
     if (this.data) {
       this.textContentService.putText(textContent).subscribe(
         {
-          next: _ => this.dialogRef.close(),
+          next: _ => {
+            this.dialogRef.close()
+            this.textContentService.textContentEvent.emit()
+          },
           error: _ => this.toastService.showUnexpectedError()
         }
       )
     } else {
       this.textContentService.postText(textContent).subscribe(
         {
-          next: _ => this.dialogRef.close(),
+          next: _ => {
+            this.dialogRef.close()
+            this.textContentService.textContentEvent.emit()
+          },
           error: _ => this.toastService.showUnexpectedError()
         }
       )

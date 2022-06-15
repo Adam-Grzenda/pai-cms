@@ -39,21 +39,25 @@ export class MainFeedComponent implements OnInit {
     this.authService.authEvent.subscribe(
       _ => {
         this.loadTexts()
+        this.router.navigate([""])
       }
     )
+
+    this.textContentService.textContentEvent.subscribe(_ => {
+      this.loadTexts()
+      this.router.navigate([""])
+    })
+
 
     let tagsParam = this.route.snapshot.queryParamMap.get("tags")?.split(",")
     if (tagsParam) {
       this.initialTags = tagsParam
     }
 
-
-
     this.route.queryParamMap.subscribe(queryParams => {
       let searchKeyword = queryParams.get("search") ?? undefined;
       let tagsFilter = queryParams.get("tags") ?? undefined
       this.loadTexts(searchKeyword, tagsFilter)
-
     })
 
   }
