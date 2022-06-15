@@ -1,8 +1,6 @@
 package pl.put.cmsbackend.content.text;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.put.cmsbackend.auth.user.app.AppUser;
@@ -15,6 +13,7 @@ import pl.put.cmsbackend.content.exception.TextContentNotFound;
 import pl.put.cmsbackend.content.text.db.TextContent;
 import pl.put.cmsbackend.content.text.db.TextContentRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 import static pl.put.cmsbackend.content.text.TextContentMapper.mapContentToContentDto;
@@ -32,7 +31,7 @@ public class TextContentService {
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " not found"));
         validateTitle(email, textContent.title());
 
-        TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content(), textContent.contentTags());
+        TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content(), textContent.tags());
         TextContent savedContent = contentRepository.save(content);
 
         return mapContentToContentDto(savedContent);
@@ -89,13 +88,13 @@ public class TextContentService {
         return mapContentToContentDto(content);
     }
 
-    public Page<TextContentDto> getTextContentPaginated(String requestingUserEmail, Pageable pageable) {
-        AppUser user = appUserService.findUserByEmail(requestingUserEmail)
-                .orElseThrow(() -> new UserNotFoundException(requestingUserEmail));
-
-        return contentRepository.findAllByOwner_id(user.getId(), pageable)
-                .map(TextContentMapper::mapContentToContentDto);
+    public List<TextContentDto> getTextContent(String requestingUserEmail) {
+        return contentRepository.findAllByOwner_Email(requestingUserEmail)
+                .stream()
+                .map(TextContentMapper::mapContentToContentDto)
+                .toList();
     }
+
 
     private Optional<TextContent> findExistingContent(TextContentDto updateContent) {
         if (updateContent.id() != null) {
@@ -107,6 +106,6 @@ public class TextContentService {
 
 
     public boolean titleAvailable(String title, String email) {
-        return contentRepository.existsByTitleAndOwner_Email(title, email);
+        return !contentRepository.existsByTitleAndOwner_Email(title, email);
     }
 }

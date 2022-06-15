@@ -3,13 +3,14 @@ package pl.put.cmsbackend.content.text.db;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.search.annotations.ContainedIn;
 import org.hibernate.search.annotations.Field;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.TermVector;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Indexed
@@ -44,9 +45,10 @@ public class TextContent {
     @ElementCollection(targetClass = ContentTag.class)
     @CollectionTable
     @Enumerated(EnumType.STRING)
-    private List<ContentTag> contentTags;
+    @ContainedIn
+    private Set<ContentTag> contentTags;
 
-    public TextContent(AppUser owner, String title, String subtitle, String content, List<ContentTag> contentTags) {
+    public TextContent(AppUser owner, String title, String subtitle, String content, Set<ContentTag> contentTags) {
         this.owner = owner;
         this.title = title;
         this.subtitle = subtitle;

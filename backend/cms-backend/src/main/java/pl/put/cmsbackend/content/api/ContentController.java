@@ -32,9 +32,9 @@ public class ContentController {
     }
 
     @GetMapping("/texts")
-    public Page<TextContentDto> getAllUserTextContent(Pageable pageable, Authentication authentication) {
+    public List<TextContentDto> getAllUserTextContent(Authentication authentication) {
         String username = (String) authentication.getPrincipal();
-        return textContentService.getTextContentPaginated(username, pageable);
+        return textContentService.getTextContent(username);
     }
 
     @GetMapping("/texts/{id}")
@@ -70,9 +70,9 @@ public class ContentController {
     }
 
     @GetMapping("/texts/search")
-    public List<TextContentDto> searchTextContentByKeyword(@RequestParam String keyword, Authentication authentication) {
+    public List<TextContentDto> searchTextContentByKeyword(@RequestParam(required = false) String keyword, @RequestParam(required = false) List<ContentTag> tags, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
-        return indexedTextContentService.findTextContentByKeyword(keyword, username);
+        return indexedTextContentService.findTextContentByKeyword(keyword,tags, username);
     }
 
     @GetMapping("/texts/tags")
