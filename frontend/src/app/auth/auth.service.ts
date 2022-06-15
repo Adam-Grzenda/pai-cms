@@ -87,8 +87,7 @@ export class AuthService {
       map((value: AuthTokens) => {
           return true
         }
-      ),
-      catchError(_ => of(false))
+      )
     )
   }
 

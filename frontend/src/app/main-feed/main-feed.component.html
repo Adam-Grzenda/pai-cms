@@ -5,7 +5,8 @@
     <mat-card-content>
       <mat-chip-list #chipList selectable multiple>
         <mat-icon>filter_alt</mat-icon>
-        <mat-chip *ngFor="let tag of availableTags" #chip="matChip" [selected]="initialTags.indexOf(chip.value.trim())>=0" (click)="onClickChip(chip, chipList)">
+        <mat-chip *ngFor="let tag of availableTags" #chip="matChip"
+                  [selected]="initialTags.indexOf(chip.value.trim())>=0" (click)="onClickChip(chip, chipList)">
           {{tag}}
         </mat-chip>
       </mat-chip-list>
@@ -19,7 +20,7 @@
     </div>
   </div>
 
-  <div *ngIf="loadedContent && loadedContent.length == 0">
+  <div id="noContent" *ngIf="loadedContent && loadedContent.length == 0">
     No content found
   </div>
 </div>

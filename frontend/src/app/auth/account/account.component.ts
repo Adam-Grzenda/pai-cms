@@ -57,7 +57,9 @@ export class AccountComponent implements OnInit {
             this.login = true;
             this.toastService.showSuccess("User registered successfully");
           },
-          error: _ => this.toastService.showUnexpectedError()
+          error: error => {
+            this.toastService.showError(error.error.message)
+          }
         }
       )
     }
