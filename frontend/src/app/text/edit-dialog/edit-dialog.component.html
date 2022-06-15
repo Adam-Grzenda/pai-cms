@@ -18,6 +18,12 @@
         <textarea matInput formControlName="content" placeholder="Content"></textarea>
       </mat-form-field>
     </p>
+    <p>
+      <mat-chip-list #chipList selectable multiple>
+        <mat-chip *ngFor="let tag of availableTags" #chip="matChip" [selected]="selectedTags.indexOf(chip.value) >= 0"
+                  (click)="onClickChip(chip, chipList)">{{tag}}</mat-chip>
+      </mat-chip-list>
+    </p>
 
     <div class="form-actions">
       <button mat-button type="submit" [disabled]="!editForm.valid">Submit changes</button>

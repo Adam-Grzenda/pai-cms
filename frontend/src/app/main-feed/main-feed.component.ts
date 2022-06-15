@@ -1,9 +1,10 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {AuthService} from "../auth/auth.service";
 import {TextContentService} from "../text/text.service";
 import {TextContent} from "../text/TextContent";
 import {ToastService} from "../toast.service";
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
+import {MatChip, MatChipList} from "@angular/material/chips";
 
 @Component({
   selector: 'app-main-feed',
@@ -15,15 +16,25 @@ export class MainFeedComponent implements OnInit {
   constructor(private authService: AuthService,
               private textContentService: TextContentService,
               private toastService: ToastService,
-              private route: ActivatedRoute) {
+              private route: ActivatedRoute,
+              private router: Router) {
   }
 
   loadedContent: TextContent[];
+  initialTags: string[]
 
   loading: boolean = false;
+  availableTags: string[];
+  selectedTags: string[];
+
+  @ViewChild("chipList")
+  chipList: MatChipList
 
   ngOnInit(): void {
     this.loadTexts()
+    this.textContentService.getAvailableTags().subscribe(
+      result => this.availableTags = result
+    )
 
     this.authService.authEvent.subscribe(
       _ => {
@@ -31,23 +42,28 @@ export class MainFeedComponent implements OnInit {
       }
     )
 
+    let tagsParam = this.route.snapshot.queryParamMap.get("tags")?.split(",")
+    if (tagsParam) {
+      this.initialTags = tagsParam
+    }
+
+
+
     this.route.queryParamMap.subscribe(queryParams => {
-      let searchKeyword = queryParams.get("search");
-      if (searchKeyword) {
-        this.loadTexts(searchKeyword)
-      } else {
-        this.loadTexts()
-      }
+      let searchKeyword = queryParams.get("search") ?? undefined;
+      let tagsFilter = queryParams.get("tags") ?? undefined
+      this.loadTexts(searchKeyword, tagsFilter)
+
     })
 
   }
 
 
-  loadTexts(searchKeyword: string = "") {
+  loadTexts(searchKeyword: string | undefined = undefined, tagsFilter: string | undefined = undefined) {
     this.loading = true;
     if (this.authService.getCurrentUser().loggedIn) {
-      if (searchKeyword != "") {
-        this.loadFiltered(searchKeyword);
+      if (searchKeyword || tagsFilter) {
+        this.loadFiltered(searchKeyword??"", tagsFilter??"");
       } else {
         this.loadUnfiltered();
       }
@@ -61,7 +77,7 @@ export class MainFeedComponent implements OnInit {
     this.textContentService.getTexts().subscribe(
       {
         next: (value => {
-          this.loadedContent = value.content
+          this.loadedContent = value
           this.loading = false
         }),
         error: (error => {
@@ -73,8 +89,8 @@ export class MainFeedComponent implements OnInit {
     )
   }
 
-  private loadFiltered(searchKeyword: string) {
-    this.textContentService.getTextsFiltered(searchKeyword).subscribe(
+  private loadFiltered(searchKeyword: string, tagsFilter: string) {
+    this.textContentService.getTextsFiltered(searchKeyword, tagsFilter).subscribe(
       {
         next: (value => {
           this.loadedContent = value
@@ -87,5 +103,23 @@ export class MainFeedComponent implements OnInit {
         })
       }
     )
+  }
+
+  onClickChip(chip: MatChip, chipList: MatChipList) {
+    chip.toggleSelected()
+    let selectedChips = chipList.selected;
+
+    if (selectedChips instanceof MatChip) {
+      this.selectedTags = [selectedChips.value]
+    } else {
+      this.selectedTags = selectedChips.map(chip => chip.value)
+    }
+
+    this.router.navigate([], {
+      queryParams: {
+        tags: this.selectedTags.map(item => item.trim()).join(",")
+      },
+      queryParamsHandling: "merge"
+    });
   }
 }

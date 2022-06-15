@@ -32,6 +32,8 @@ import {EditDialogComponent} from './text/edit-dialog/edit-dialog.component';
 import {ConfirmDialogComponent} from './text/confirm-dialog/confirm-dialog.component';
 import {RouterModule, Routes} from "@angular/router";
 import {RefreshTokenInterceptor} from "./auth/auth.service";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatCheckboxModule} from "@angular/material/checkbox";
 
 const routes: Routes = [
   {path: '', component: MainFeedComponent}
@@ -72,7 +74,9 @@ const routes: Routes = [
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
     ToastrModule.forRoot(),
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatChipsModule,
+    MatCheckboxModule
   ],
   exports: [RouterModule],
   providers: [

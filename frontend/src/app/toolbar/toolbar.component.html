@@ -1,13 +1,8 @@
 <mat-toolbar>
   <mat-form-field>
-    <input matInput placeholder="Search texts" (keyup.enter)="onEnter($event)">
+    <input matInput placeholder="Search texts" [(ngModel)]="inputValue" (keyup.enter)="onEnter($event)">
   </mat-form-field>
-  <button mat-button [mat-menu-trigger-for]="filterMenu">
-    <mat-icon>filter_alt</mat-icon>
-  </button>
-  <mat-menu #filterMenu="matMenu">
-    <button mat-menu-item>sort</button>
-  </mat-menu>
+
 
   <button mat-button *ngIf="isSignedIn" (click)="addText()">
     <mat-icon>add</mat-icon>
@@ -22,4 +17,3 @@
   </mat-menu>
 </mat-toolbar>
 
-<button mat-button (click)="tryRefresh()">refresh</button>

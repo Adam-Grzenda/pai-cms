@@ -6,7 +6,7 @@
     </div>
 
     <div *ngIf="isOwner" id=actions>
-      <button  mat-button (click)="onClickShare()">
+      <button mat-button (click)="onClickShare()">
         <mat-icon *ngIf="isShared">lock_open</mat-icon>
         <mat-icon *ngIf="!isShared">lock</mat-icon>
         <mat-icon>share</mat-icon>
@@ -22,5 +22,16 @@
 
     </div>
   </div>
-  <mat-card-content><p>{{this.textContent.content}}</p></mat-card-content>
+  <mat-card-content>
+    <p>{{this.textContent.content}}</p>
+    <p>
+      <mat-chip-list selectable="false">
+        <mat-chip *ngFor="let tag of this.textContent.tags">
+          {{tag}}
+        </mat-chip>
+      </mat-chip-list>
+
+    </p>
+  </mat-card-content>
+
 </mat-card>

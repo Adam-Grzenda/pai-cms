@@ -4,6 +4,8 @@ import {AccountComponent} from "../auth/account/account.component";
 import {AuthService} from "../auth/auth.service";
 import {EditDialogComponent} from "../text/edit-dialog/edit-dialog.component";
 import {ActivatedRoute, Router} from "@angular/router";
+import {MatChip} from "@angular/material/chips";
+import {TextContentService} from "../text/text.service";
 
 @Component({
   selector: 'app-toolbar',
@@ -15,12 +17,16 @@ export class ToolbarComponent implements OnInit {
 
   isSignedIn: boolean = false;
   username: string = this.GUEST_NAME;
+  availableTags: string[];
+  inputValue: string = ""
+
 
   constructor(
     private dialog: MatDialog,
     private authService: AuthService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private textContentService: TextContentService
   ) {
   }
 
@@ -30,6 +36,18 @@ export class ToolbarComponent implements OnInit {
       this.isSignedIn = true;
       this.username = currentUser.email;
     }
+
+    let searchParam = this.route.snapshot.queryParamMap.get("search");
+    this.inputValue = searchParam ?? ""
+
+    console.log(this.route.snapshot)
+
+
+    this.textContentService.getAvailableTags().subscribe(
+      result => this.availableTags = result
+    )
+
+
   }
 
   signIn() {
@@ -77,9 +95,4 @@ export class ToolbarComponent implements OnInit {
     })
   }
 
-  tryRefresh() {
-    this.authService.refreshToken().subscribe( result=>
-      console.log(result)
-    )
-  }
 }

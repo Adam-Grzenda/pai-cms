@@ -1,9 +1,10 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TextContentService} from "../text.service";
 import {TextContent} from "../TextContent";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {ToastService} from "../../toast.service";
+import {MatChip, MatChipList} from "@angular/material/chips";
 
 @Component({
   selector: 'app-edit-dialog',
@@ -11,6 +12,13 @@ import {ToastService} from "../../toast.service";
   styleUrls: ['./edit-dialog.component.css']
 })
 export class EditDialogComponent implements OnInit {
+
+  availableTags: string[];
+  selectedTags: string[];
+
+  @ViewChild("chipList")
+  chipList: MatChipList
+
   editForm: FormGroup = this.fb.group(
     {
       title: ['', [Validators.required]],
@@ -32,7 +40,14 @@ export class EditDialogComponent implements OnInit {
       this.editForm.controls["title"].setValue(this.data.title)
       this.editForm.controls["subtitle"].setValue(this.data.subtitle)
       this.editForm.controls["content"].setValue(this.data.content)
+      this.selectedTags = this.data.tags
     }
+
+    this.textContentService.getAvailableTags().subscribe(
+      result => {
+        this.availableTags = result
+      }
+    );
   }
 
   onSubmit() {
@@ -51,6 +66,7 @@ export class EditDialogComponent implements OnInit {
     textContent.title = title;
     textContent.subtitle = subtitle;
     textContent.content = content;
+    textContent.tags = this.selectedTags
 
     if (this.data) {
       this.textContentService.putText(textContent).subscribe(
@@ -70,4 +86,18 @@ export class EditDialogComponent implements OnInit {
 
 
   }
+
+  onClickChip(chip: MatChip, chipList: MatChipList) {
+    chip.toggleSelected()
+    let selectedChips = chipList.selected;
+
+    if (selectedChips instanceof MatChip) {
+      this.selectedTags = [selectedChips.value]
+    } else {
+      this.selectedTags = selectedChips.map(chip => chip.value)
+    }
+
+  }
+
+
 }

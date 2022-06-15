@@ -1,3 +1,17 @@
+<app-toolbar></app-toolbar>
+
+<div>
+  <mat-card>
+    <mat-card-content>
+      <mat-chip-list #chipList selectable multiple>
+        <mat-icon>filter_alt</mat-icon>
+        <mat-chip *ngFor="let tag of availableTags" #chip="matChip" [selected]="initialTags.indexOf(chip.value.trim())>=0" (click)="onClickChip(chip, chipList)">
+          {{tag}}
+        </mat-chip>
+      </mat-chip-list>
+    </mat-card-content>
+  </mat-card>
+</div>
 <div class="feed">
   <mat-progress-spinner [mode]="'indeterminate'" *ngIf="loading"></mat-progress-spinner>
   <div *ngIf="loadedContent && loadedContent.length > 0">
