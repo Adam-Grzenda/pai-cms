@@ -1,9 +1,19 @@
 import {EventEmitter, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpHeaders,
+  HttpInterceptor,
+  HttpParams,
+  HttpRequest
+} from "@angular/common/http";
 import {environment} from "../../environments/environment";
-import {catchError, map} from "rxjs/operators"
-import {Observable, of} from "rxjs";
+import {catchError, filter, map, switchMap, take} from "rxjs/operators"
+import {BehaviorSubject, Observable, of, throwError} from "rxjs";
 import {JwtHelperService} from "@auth0/angular-jwt";
+import {Router} from "@angular/router";
 
 const ACCESS_TOKEN = "access_token";
 const REFRESH_TOKEN = "refresh_token";
@@ -16,6 +26,8 @@ export class AuthService {
   private static readonly EMAIL_PARAMETER = "email";
   private static readonly PASSWORD_PARAMETER = "password";
 
+  private jwtHelper: JwtHelperService = new JwtHelperService();
+
   authEvent: EventEmitter<AuthEventType> = new EventEmitter<AuthEventType>();
 
   private headers = new HttpHeaders(
@@ -25,7 +37,7 @@ export class AuthService {
     }
   );
 
-  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) {
+  constructor(private http: HttpClient) {
   }
 
   login(email: string, password: string): Observable<AuthServiceResponse> {
@@ -41,6 +53,15 @@ export class AuthService {
       ),
       catchError(_ => of(new AuthServiceResponse(false)))
     )
+  }
+
+  refreshToken(): Observable<AuthTokens> {
+    const body = new HttpParams().append("refreshToken", "Bearer " + localStorage.getItem(REFRESH_TOKEN) ?? "");
+    return this.http.post<AuthTokens>(environment.apiHost + "/refresh", body)
+  }
+
+  getAccessToken(): string | null {
+    return localStorage.getItem(ACCESS_TOKEN)
   }
 
   getCurrentUser(): AuthServiceResponse {
@@ -83,13 +104,85 @@ export class AuthService {
 
   }
 
-
   private static createAuthenticationBody(email: string, password: string) {
     return new HttpParams().append(this.EMAIL_PARAMETER, email).append(this.PASSWORD_PARAMETER, password);
   }
-
-
 }
+
+@Injectable()
+export class RefreshTokenInterceptor implements HttpInterceptor {
+
+  private isRefreshing = false
+  private refreshTokenSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null)
+
+  constructor(private authService: AuthService,
+              private router: Router) {
+  }
+
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+
+    let currentToken = this.authService.getAccessToken()
+
+    if (currentToken != null) {
+      req = this.addToken(req, currentToken)
+    }
+
+
+    return next.handle(req).pipe(
+      catchError((error, _) => {
+        if (error instanceof HttpErrorResponse && error.status == 401) {
+          return this.handleUnauthorized(req, next)
+        } else {
+          return throwError(error);
+        }
+      })
+    )
+  }
+
+
+  private handleUnauthorized(request: HttpRequest<any>, next: HttpHandler) {
+    if (!this.isRefreshing) {
+      this.isRefreshing = true;
+      this.refreshTokenSubject.next(null);
+
+      return this.authService.refreshToken().pipe(
+        switchMap((tokens: AuthTokens) => {
+          this.isRefreshing = false
+          this.refreshTokenSubject.next(tokens.access_token)
+          localStorage.setItem(REFRESH_TOKEN, tokens.refresh_token)
+          localStorage.setItem(ACCESS_TOKEN, tokens.access_token)
+          return next.handle(this.addToken(request, tokens.access_token))
+        }),
+        catchError(error => {
+          console.log(error)
+          return of()
+        })
+      )
+    } else {
+      return this.refreshTokenSubject.pipe(
+        filter(token => token != null),
+        take(1),
+        switchMap(token => {
+          return next.handle(this.addToken(request, token))
+        })
+      )
+    }
+
+
+  }
+
+
+  private addToken(request: HttpRequest<any>, access_token: string) {
+    return request.clone(
+      {
+        setHeaders: {
+          'Authorization': 'Bearer ' + access_token
+        }
+      }
+    );
+  }
+}
+
 
 enum AuthEventType {
   LOGIN,

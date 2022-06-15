@@ -76,4 +76,10 @@ export class ToolbarComponent implements OnInit {
       skipLocationChange: false
     })
   }
+
+  tryRefresh() {
+    this.authService.refreshToken().subscribe( result=>
+      console.log(result)
+    )
+  }
 }
