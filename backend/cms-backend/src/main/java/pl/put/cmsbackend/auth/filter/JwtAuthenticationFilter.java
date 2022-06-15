@@ -16,6 +16,7 @@ import java.io.IOException;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static pl.put.cmsbackend.auth.config.WebSecurityConfig.LOGIN_URI;
+import static pl.put.cmsbackend.auth.config.WebSecurityConfig.REFRESH;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -28,7 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        if (request.getServletPath().equals(LOGIN_URI) || authorizationHeader == null) {
+        if (request.getServletPath().equals(LOGIN_URI) || request.getServletPath().equals(REFRESH)||authorizationHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -40,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (InvalidAuthenticationTokenException e) {
             log.error("JWT authorization failed: {}", e.getMessage());
-            response.sendError(HttpServletResponse.SC_FORBIDDEN, "Invalid authorization token");
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid authorization token");
         }
     }
 }

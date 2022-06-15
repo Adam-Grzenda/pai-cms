@@ -9,6 +9,7 @@ import org.hibernate.search.annotations.TermVector;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Indexed
@@ -16,6 +17,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 public class TextContent {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,10 +40,17 @@ public class TextContent {
     @Field(termVector = TermVector.YES, name = "content")
     private String content;
 
-    public TextContent(AppUser owner, String title, String subtitle, String content) {
+
+    @ElementCollection(targetClass = ContentTag.class)
+    @CollectionTable
+    @Enumerated(EnumType.STRING)
+    private List<ContentTag> contentTags;
+
+    public TextContent(AppUser owner, String title, String subtitle, String content, List<ContentTag> contentTags) {
         this.owner = owner;
         this.title = title;
         this.subtitle = subtitle;
         this.content = content;
+        this.contentTags = contentTags;
     }
 }

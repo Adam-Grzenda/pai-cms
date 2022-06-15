@@ -2,7 +2,7 @@ package pl.put.cmsbackend.auth.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pl.put.cmsbackend.auth.token.AuthTokens;
 import pl.put.cmsbackend.auth.token.TokenService;
@@ -17,9 +17,9 @@ public class AuthController {
 
 
     @PostMapping("/refresh")
-    public AuthTokens refreshTokens(@RequestHeader("Authorization") String authorizationHeader,
+    public AuthTokens refreshTokens(@RequestParam String refreshToken,
                                     HttpServletRequest request) {
-        return tokenService.refreshTokens(authorizationHeader, request.getRequestURI());
+        return tokenService.refreshTokens(refreshToken, request.getRequestURI());
     }
 
 }

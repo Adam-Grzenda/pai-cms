@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.put.cmsbackend.auth.token.TokenService;
 import pl.put.cmsbackend.content.text.IndexedTextContentService;
 import pl.put.cmsbackend.content.text.TextContentService;
+import pl.put.cmsbackend.content.text.db.ContentTag;
 
 import java.util.List;
 import java.util.Optional;
@@ -42,7 +43,6 @@ public class ContentController {
         return textContentService.getPublicTextById(id);
     }
 
-
     @DeleteMapping("/texts/{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteTextContentById(@PathVariable Long id, Authentication authentication) {
@@ -61,7 +61,7 @@ public class ContentController {
     public ResponseEntity<Optional<String>> shareContent(@PathVariable Long id, @RequestParam Boolean share, @RequestParam(defaultValue = "5") Long validForDays, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
         textContentService.changeContentSharedStatus(id, username, share);
-        if (share) {
+        if (share.equals(Boolean.TRUE)) {
             String contentToken = tokenService.generateContentToken(id, validForDays);
             return ResponseEntity.ok(Optional.of(contentToken));
         } else {
@@ -73,6 +73,17 @@ public class ContentController {
     public List<TextContentDto> searchTextContentByKeyword(@RequestParam String keyword, Authentication authentication) {
         String username = (String) authentication.getPrincipal();
         return indexedTextContentService.findTextContentByKeyword(keyword, username);
+    }
+
+    @GetMapping("/texts/tags")
+    public ContentTag[] getAvailableContentTags() {
+        return ContentTag.values();
+    }
+
+    @PostMapping("/texts/title")
+    public ResponseEntity<Boolean> checkTitleAvailable(@RequestParam String title, Authentication authentication) {
+        String username = (String) authentication.getPrincipal();
+        return ResponseEntity.ok(textContentService.titleAvailable(title, username));
     }
 
 }

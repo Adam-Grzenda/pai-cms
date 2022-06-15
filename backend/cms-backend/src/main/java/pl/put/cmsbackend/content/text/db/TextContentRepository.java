@@ -12,4 +12,5 @@ public interface TextContentRepository extends CrudRepository<TextContent, Long>
 
     Page<TextContent> findAllByOwner_id(Long owner_id, Pageable pageable);
 
+    boolean existsByTitleAndOwner_Email(String title, String ownerEmail);
 }

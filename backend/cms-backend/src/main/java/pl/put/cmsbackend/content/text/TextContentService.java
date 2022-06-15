@@ -8,10 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.put.cmsbackend.auth.user.app.AppUser;
 import pl.put.cmsbackend.auth.user.app.AppUserService;
 import pl.put.cmsbackend.auth.user.exception.UserNotFoundException;
+import pl.put.cmsbackend.content.api.TextContentDto;
 import pl.put.cmsbackend.content.exception.ContentAccessPermissionException;
 import pl.put.cmsbackend.content.exception.InvalidTextContentException;
 import pl.put.cmsbackend.content.exception.TextContentNotFound;
-import pl.put.cmsbackend.content.api.TextContentDto;
 import pl.put.cmsbackend.content.text.db.TextContent;
 import pl.put.cmsbackend.content.text.db.TextContentRepository;
 
@@ -30,9 +30,9 @@ public class TextContentService {
     public TextContentDto addTextContent(String email, TextContentDto textContent) {
         AppUser user = appUserService.findUserByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " not found"));
-        validateTitle(email, textContent);
+        validateTitle(email, textContent.title());
 
-        TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content());
+        TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content(), textContent.contentTags());
         TextContent savedContent = contentRepository.save(content);
 
         return mapContentToContentDto(savedContent);
@@ -53,7 +53,7 @@ public class TextContentService {
         TextContent content = currentContent.orElse(new TextContent());
 
         if (!content.getTitle().equals(updateContent.title())) {
-            validateTitle(email, updateContent);
+            validateTitle(email, updateContent.title());
             content.setTitle(updateContent.title());
         }
         content.setContent(updateContent.content());
@@ -61,6 +61,12 @@ public class TextContentService {
 
         TextContent savedContent = contentRepository.save(content);
         return mapContentToContentDto(savedContent);
+    }
+
+    private void validateTitle(String email, String title) {
+        if (!titleAvailable(title, email)) {
+            throw new InvalidTextContentException("Duplicate title not allowed for user:" + email);
+        }
     }
 
     @Transactional
@@ -94,12 +100,6 @@ public class TextContentService {
     }
 
 
-    private void validateTitle(String email, TextContentDto textContent) {
-        if (contentRepository.findByOwner_EmailAndTitle(email, textContent.title()).isPresent()) {
-            throw new InvalidTextContentException("Duplicate title: " + textContent.content() + " is not allowed");
-        }
-    }
-
     private void checkSameUser(String requestingUserEmail, Long ownerId) {
         AppUser user = appUserService.findUserByEmail(requestingUserEmail)
                 .orElseThrow(() -> new UserNotFoundException(requestingUserEmail));
@@ -109,5 +109,7 @@ public class TextContentService {
         }
     }
 
-
+    public boolean titleAvailable(String title, String email) {
+        return contentRepository.existsByTitleAndOwner_Email(title, email);
+    }
 }
