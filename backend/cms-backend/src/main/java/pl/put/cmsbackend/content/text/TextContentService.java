@@ -42,14 +42,20 @@ public class TextContentService {
     public void deleteTextContent(String email, Long id) {
         TextContent content = contentRepository.findById(id).orElseThrow(() -> new TextContentNotFound(id));
 
-        checkSameUser(email, content.getOwner().getId());
+        checkSameUser(email, content);
         contentRepository.deleteById(id);
+    }
+
+    private void checkSameUser(String email, TextContent content) {
+        if (!content.getOwner().getEmail().equals(email)) {
+            throw new ContentAccessPermissionException();
+        }
     }
 
     @Transactional
     public TextContentDto updateTextContent(String email, TextContentDto updateContent) {
         Optional<TextContent> currentContent = findExistingContent(updateContent);
-        currentContent.ifPresent(content -> checkSameUser(email, content.getOwner().getId()));
+        currentContent.ifPresent(content -> checkSameUser(email, content));
         TextContent content = currentContent.orElse(new TextContent());
 
         if (!content.getTitle().equals(updateContent.title())) {
@@ -73,7 +79,7 @@ public class TextContentService {
     public void changeContentSharedStatus(Long contentId, String email, Boolean requestedShareStatus) {
         TextContent content = contentRepository.findById(contentId)
                 .orElseThrow(() -> new TextContentNotFound(contentId));
-        checkSameUser(email, content.getOwner().getId());
+        checkSameUser(email, content);
 
         content.setShared(requestedShareStatus);
     }
@@ -99,15 +105,6 @@ public class TextContentService {
         }
     }
 
-
-    private void checkSameUser(String requestingUserEmail, Long ownerId) {
-        AppUser user = appUserService.findUserByEmail(requestingUserEmail)
-                .orElseThrow(() -> new UserNotFoundException(requestingUserEmail));
-
-        if (!user.getId().equals(ownerId)) {
-            throw new ContentAccessPermissionException();
-        }
-    }
 
     public boolean titleAvailable(String title, String email) {
         return contentRepository.existsByTitleAndOwner_Email(title, email);
