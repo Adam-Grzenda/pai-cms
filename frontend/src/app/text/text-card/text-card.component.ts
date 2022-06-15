@@ -38,8 +38,8 @@ export class TextCardComponent implements OnInit {
   onClickShare(): void {
     this.dialog.open(ShareDialogComponent, {
       data: this.textContent,
-      minWidth: "30%",
-      minHeight: "30%"
+      minWidth: "45%",
+      minHeight: "45%"
     })
   }
 

@@ -15,19 +15,19 @@ export class TextContentService {
   }
 
   postText(textContent: TextContent): Observable<TextContent> {
-    return this.http.post <TextContent>(environment.contentApiBaseUrl + "/texts", textContent);
+    return this.http.post <TextContent>(`${environment.contentApiBaseUrl}/texts`, textContent);
   }
 
   putText(textContent: TextContent): Observable<TextContent> {
-    return this.http.put <TextContent>(environment.contentApiBaseUrl + "/texts", textContent);
+    return this.http.put <TextContent>(`${environment.contentApiBaseUrl}/texts`, textContent);
   }
 
   getTexts(): Observable<TextContent[]> {
-    return this.http.get<TextContent[]>(environment.contentApiBaseUrl + "/texts", {observe: "body"})
+    return this.http.get<TextContent[]>(`${environment.contentApiBaseUrl}/texts`, {observe: "body"})
   }
 
   deleteText(textContent: TextContent): Observable<any> {
-    return this.http.delete<any>(environment.contentApiBaseUrl + "/texts/" + textContent.id);
+    return this.http.delete<any>(`${environment.contentApiBaseUrl}/texts/${textContent.id}`);
   }
 
   getTextsFiltered(searchKeyword: string, tagsFilter: string): Observable<Array<TextContent>> {
@@ -43,7 +43,15 @@ export class TextContentService {
     return this.http.get<Array<TextContent>>(environment.contentApiBaseUrl + "/texts/search", {params: params})
   }
 
+  setShared(textContent: TextContent, shared: boolean): Observable<any> {
+    return this.http.post(`${environment.contentApiBaseUrl}/texts/${textContent.id}/share?share=${shared}`, {})
+  }
+
+  getPublicText(id: number, token: string): Observable<TextContent> {
+    return this.http.get<TextContent>(`${environment.contentApiBaseUrl}/texts/${id}/?token=${token}`)
+  }
+
   getAvailableTags(): Observable<Array<string>> {
-    return this.http.get<Array<string>>(environment.contentApiBaseUrl + "/texts/tags");
+    return this.http.get<Array<string>>(`${environment.contentApiBaseUrl}/texts/tags`);
   }
 }

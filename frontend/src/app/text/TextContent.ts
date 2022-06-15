@@ -3,10 +3,7 @@ export class TextContent {
   title: string;
   subtitle: string;
   content: string;
-  tags: string[]
+  isShared: boolean;
+  tags: string[];
 }
 
-export class TextContentPage {
-  content: TextContent[];
-  totalPages: number;
-}

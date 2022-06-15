@@ -24,7 +24,6 @@ import {MatSlideToggleModule} from "@angular/material/slide-toggle";
 import {PublicTextViewComponent} from './text/public-text-view/public-text-view.component';
 import {MatBottomSheetModule} from "@angular/material/bottom-sheet";
 import {ForgotPasswordComponent} from './auth/forgot-password/forgot-password.component';
-import {JwtModule} from "@auth0/angular-jwt";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {ToastrModule} from "ngx-toastr";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
@@ -36,7 +35,8 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 
 const routes: Routes = [
-  {path: '', component: MainFeedComponent}
+  {path: '', component: MainFeedComponent},
+  {path: 'public/:text-content-id', component: PublicTextViewComponent}
 ]
 
 @NgModule({

@@ -21,7 +21,7 @@ export class MainFeedComponent implements OnInit {
   }
 
   loadedContent: TextContent[];
-  initialTags: string[]
+  initialTags: string[] = new Array<string>()
 
   loading: boolean = false;
   availableTags: string[];
