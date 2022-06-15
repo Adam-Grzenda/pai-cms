@@ -4,7 +4,6 @@ import {AccountComponent} from "../auth/account/account.component";
 import {AuthService} from "../auth/auth.service";
 import {EditDialogComponent} from "../text/edit-dialog/edit-dialog.component";
 import {ActivatedRoute, Router} from "@angular/router";
-import {MatChip} from "@angular/material/chips";
 import {TextContentService} from "../text/text.service";
 
 @Component({
@@ -35,6 +34,8 @@ export class ToolbarComponent implements OnInit {
     if (currentUser.loggedIn && currentUser.email) {
       this.isSignedIn = true;
       this.username = currentUser.email;
+    } else {
+      this.signIn()
     }
 
     let searchParam = this.route.snapshot.queryParamMap.get("search");
@@ -53,7 +54,8 @@ export class ToolbarComponent implements OnInit {
   signIn() {
     let dialogRef = this.dialog.open(AccountComponent, {
       minWidth: '50%',
-      maxWidth: '60%'
+      maxWidth: '60%',
+      disableClose: true
     })
 
     dialogRef.afterClosed().subscribe(_ => {
@@ -73,7 +75,7 @@ export class ToolbarComponent implements OnInit {
     this.authService.logout()
     this.isSignedIn = false;
     this.username = this.GUEST_NAME;
-
+    this.signIn()
   }
 
   addText() {

@@ -33,10 +33,12 @@ import {RouterModule, Routes} from "@angular/router";
 import {RefreshTokenInterceptor} from "./auth/auth.service";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
+import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {path: '', component: MainFeedComponent},
-  {path: 'public/:text-content-id', component: PublicTextViewComponent}
+  {path: 'public/:text-content-id', component: PublicTextViewComponent},
+  {path: '**', pathMatch: 'full', component: PageNotFoundComponent},
 ]
 
 @NgModule({
@@ -50,7 +52,8 @@ const routes: Routes = [
     PublicTextViewComponent,
     ForgotPasswordComponent,
     EditDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    PageNotFoundComponent
   ],
   imports: [
     BrowserModule,

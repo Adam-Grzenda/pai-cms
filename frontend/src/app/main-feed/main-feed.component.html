@@ -13,7 +13,6 @@
   </mat-card>
 </div>
 <div class="feed">
-  <mat-progress-spinner [mode]="'indeterminate'" *ngIf="loading"></mat-progress-spinner>
   <div *ngIf="loadedContent && loadedContent.length > 0">
     <div class="card" *ngFor="let textContent of loadedContent;">
       <app-text-card [textContent]=textContent [isOwner]="true" (textChanged)="loadTexts()"></app-text-card>
