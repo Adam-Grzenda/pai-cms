@@ -36,6 +36,13 @@ export class AccountComponent implements OnInit {
   onSubmit() {
     const email: string = this.registrationForm.get("email")?.value
     const password: string = this.registrationForm.get("password")?.value
+    const repeatedPassword: string = this.registrationForm.get("passwordRepeated")?.value
+
+    if (password != repeatedPassword) {
+      this.registrationForm.reset()
+      this.toastService.showError("Passwords do not match")
+      return
+    }
 
     if (this.login) {
       this.authService.login(email, password).subscribe(
@@ -59,6 +66,7 @@ export class AccountComponent implements OnInit {
           },
           error: error => {
             this.toastService.showError(error.error.message)
+            this.registrationForm.reset()
           }
         }
       )
@@ -78,7 +86,30 @@ export class AccountComponent implements OnInit {
       return null;
   }
 
+  passwordsMatch() {
+    const password = this.registrationForm.get("password")?.value;
+    const passwordRepeated = this.registrationForm.get("passwordRepeated")?.value;
+
+    return password == passwordRepeated;
+  }
+
+
   forgotPassword() {
     this.bottomSheet.open(ForgotPasswordComponent)
   }
+
+  onEmailFocusLost() {
+    if (!this.login) {
+      this.authService.checkUserExisting(this.registrationForm.get("email")?.value).subscribe(
+        userExisting => {
+          if (userExisting) {
+            this.toastService.showError("User with this email already exists")
+          } else {
+            this.toastService.showSuccess("User with this email does not exist")
+          }
+        }
+      )
+    }
+  }
+
 }
