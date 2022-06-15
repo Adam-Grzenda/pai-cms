@@ -9,7 +9,7 @@ public class TextContentMapper {
     }
 
     public static TextContentDto mapContentToContentDto(TextContent savedContent) {
-        return new TextContentDto(savedContent.getId(), savedContent.getTitle(), savedContent.getSubtitle(), savedContent.getContent());
+        return new TextContentDto(savedContent.getId(), savedContent.getTitle(), savedContent.getSubtitle(), savedContent.getContent(), savedContent.getContentTags());
     }
 
 }
