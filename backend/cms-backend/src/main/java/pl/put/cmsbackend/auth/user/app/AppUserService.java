@@ -39,7 +39,7 @@ public class AppUserService implements UserDetailsService {
         boolean emailValid = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
                 .matcher(email)
                 .matches();
-        boolean passwordValid = password.length() > 8;
+        boolean passwordValid = password.length() >= 8;
 
         if (!emailValid || !passwordValid) {
             throw new UserRegistrationException("Invalid email or password format");
