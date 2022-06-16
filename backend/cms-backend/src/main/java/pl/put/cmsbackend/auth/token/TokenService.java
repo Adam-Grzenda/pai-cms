@@ -122,6 +122,7 @@ public class TokenService {
     }
 
 
+
     private AppUser retrieveAppUser(DecodedJWT decodedJWT) {
         return appUserService.findUserByEmail(decodedJWT.getSubject())
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + decodedJWT.getSubject() + "not found"));
