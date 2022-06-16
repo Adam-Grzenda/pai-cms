@@ -2,9 +2,10 @@ import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {TextContentService} from "../text.service";
 import {TextContent} from "../TextContent";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {ToastService} from "../../toast.service";
 import {MatChip, MatChipList} from "@angular/material/chips";
+import {ConfirmDialogComponent} from "../confirm-dialog/confirm-dialog.component";
 
 @Component({
   selector: 'app-edit-dialog',
@@ -28,6 +29,7 @@ export class EditDialogComponent implements OnInit {
   )
 
   constructor(private fb: FormBuilder,
+              private dialog: MatDialog,
               private textContentService: TextContentService,
               private dialogRef: MatDialogRef<EditDialogComponent>,
               private toastService: ToastService,
@@ -50,7 +52,28 @@ export class EditDialogComponent implements OnInit {
     );
   }
 
+
   onSubmit() {
+
+    let dialogRef = this.dialog.open(ConfirmDialogComponent, {
+        minWidth: "30%",
+        minHeight: "30%",
+        data: "Do your really want to submit your changes?"
+      }
+    )
+
+    dialogRef.afterClosed().subscribe(
+      result => {
+        if (result) {
+          this.submit()
+        }
+      }
+    )
+
+
+  }
+
+  private submit() {
     const title: string = this.editForm.get("title")?.value
     const subtitle: string = this.editForm.get("subtitle")?.value
     const content: string = this.editForm.get("content")?.value
@@ -89,8 +112,6 @@ export class EditDialogComponent implements OnInit {
         }
       )
     }
-
-
   }
 
   onClickChip(chip: MatChip, chipList: MatChipList) {
