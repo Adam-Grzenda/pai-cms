@@ -79,6 +79,13 @@ export class AuthService {
     this.authEvent.emit(AuthEventType.LOGOUT)
   }
 
+  newPassword(email: string, token: string, password: string): Observable<any> {
+    return this.http.post<any>(environment.apiHost + "/reset-password", {
+      token: token,
+      username: email,
+      password: password
+    })
+  }
 
   register(email: string, password: string): Observable<boolean> {
     const body = AuthService.createAuthenticationBody(email, password)

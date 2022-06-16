@@ -33,10 +33,10 @@ public class UserController {
         forgottenPasswordService.sendForgottenPassword(email, request.getRequestURI());
     }
 
-    @PostMapping("/reset-password/{resetPasswordToken}")
+    @PostMapping("/reset-password")
     @ResponseStatus(OK)
-    public void resetPassword(@PathVariable String resetPasswordToken, @RequestBody PasswordResetDto passwordResetDto) {
-        forgottenPasswordService.handleResetPassword(passwordResetDto, resetPasswordToken);
+    public void resetPassword(@RequestBody PasswordResetDto passwordResetDto) {
+        forgottenPasswordService.handleResetPassword(passwordResetDto);
     }
 
     @PostMapping("/user")

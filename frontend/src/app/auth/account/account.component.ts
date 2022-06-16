@@ -38,11 +38,6 @@ export class AccountComponent implements OnInit {
     const password: string = this.registrationForm.get("password")?.value
     const repeatedPassword: string = this.registrationForm.get("passwordRepeated")?.value
 
-    if (password != repeatedPassword) {
-      this.registrationForm.reset()
-      this.toastService.showError("Passwords do not match")
-      return
-    }
 
     if (this.login) {
       this.authService.login(email, password).subscribe(
@@ -58,6 +53,11 @@ export class AccountComponent implements OnInit {
         }
       )
     } else {
+      if (password != repeatedPassword) {
+        this.registrationForm.get("passwordRepeated")?.setErrors(["Password does not match"])
+        return
+      }
+
       this.authService.register(email, password).subscribe(
         {
           next: _ => {
@@ -103,13 +103,14 @@ export class AccountComponent implements OnInit {
       this.authService.checkUserExisting(this.registrationForm.get("email")?.value).subscribe(
         userExisting => {
           if (userExisting) {
-            this.toastService.showError("User with this email already exists")
-          } else {
-            this.toastService.showSuccess("User with this email does not exist")
+            this.registrationForm.get("email")?.setErrors(["Email already taken"])
           }
         }
       )
     }
+
+    console.log(this.registrationForm.get("email")?.errors)
   }
+
 
 }

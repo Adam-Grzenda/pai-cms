@@ -24,6 +24,7 @@ public class ForgottenPasswordService {
     private static final String USERNAME = "username";
     private static final String TOKEN = "token";
     private static final String EXPECTED_ISSUER = "/forgot-password";
+    public static final String RESET_PASSWORD_URL = "resetPasswordUrl";
 
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
@@ -32,6 +33,9 @@ public class ForgottenPasswordService {
 
     @Value("${mail.template.forgottenPassword}")
     private String forgottenPasswordTemplate;
+
+    @Value("${frontend.forgottenPasswordUrl}")
+    private String forgottenPasswordUrl;
 
     public void sendForgottenPassword(String email, String issuer) {
 
@@ -47,7 +51,7 @@ public class ForgottenPasswordService {
                 .htmlTemplate(forgottenPasswordTemplate)
                 .recipient(email)
                 .subject(FORGOTTEN_PASSWORD_SUBJECT)
-                .templateVariables(Map.of(USERNAME, email, TOKEN, token))
+                .templateVariables(Map.of(USERNAME, email, TOKEN, token, RESET_PASSWORD_URL, createForgottenPasswordLink(token, email)))
                 .build();
 
 
@@ -59,11 +63,15 @@ public class ForgottenPasswordService {
         notificationRequestPublisher.publishRequest(notificationRequest);
     }
 
-    public void handleResetPassword(PasswordResetDto passwordResetDto, String token) {
+    private String createForgottenPasswordLink(String token, String email) {
+        return forgottenPasswordUrl + "?token=" + token + "&email=" + email;
+    }
+
+    public void handleResetPassword(PasswordResetDto passwordResetDto) {
         AppUser appUser = appUserRepository.findUserByEmail(passwordResetDto.username())
                 .orElseThrow(() -> new UsernameNotFoundException(passwordResetDto.username()));
 
-        tokenService. verifyResetPasswordToken(appUser, token, EXPECTED_ISSUER);
+        tokenService.verifyResetPasswordToken(appUser, passwordResetDto.token(), EXPECTED_ISSUER);
 
         appUser.setPassword(passwordEncoder.encode(passwordResetDto.password()));
         appUserRepository.save(appUser);

@@ -10,7 +10,7 @@
     <p>
       <mat-form-field hintLabel="Enter your email address">
         <input id="email" matInput placeholder="Your email" formControlName="email" (focusout)="onEmailFocusLost()">
-        <mat-error *ngIf="this.registrationForm.get('email')?.errors">Invalid email address</mat-error>
+        <mat-error *ngIf="this.registrationForm.get('email')?.errors">Email taken or invalid</mat-error>
       </mat-form-field>
     </p>
 
@@ -25,10 +25,13 @@
       <mat-form-field hintLabel="Repeat your password">
         <input id="passwordRepeated" matInput placeholder="Repeated password" type="password"
                formControlName="passwordRepeated">
-        <mat-error *ngIf="this.registrationForm.get('passwordRepeated')?.errors != null">
+        <mat-error *ngIf="registrationForm.get('password')?.errors!= null || this.registrationForm.get('passwordRepeated')?.errors != null">
           Repeated password does not match
         </mat-error>
       </mat-form-field>
+    </p>
+    <p *ngIf="!login">
+      Password must contain at least 8 characters
     </p>
     <mat-divider></mat-divider>
 

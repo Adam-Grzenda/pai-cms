@@ -34,10 +34,12 @@ import {RefreshTokenInterceptor} from "./auth/auth.service";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {PageNotFoundComponent} from './page-not-found/page-not-found.component';
+import {NewPasswordComponent} from './auth/forgot-password/new-password/new-password.component';
 
 const routes: Routes = [
   {path: '', component: MainFeedComponent},
   {path: 'public/:text-content-id', component: PublicTextViewComponent},
+  {path: 'forgotten-password', component: NewPasswordComponent},
   {path: '**', pathMatch: 'full', component: PageNotFoundComponent},
 ]
 
@@ -53,7 +55,8 @@ const routes: Routes = [
     ForgotPasswordComponent,
     EditDialogComponent,
     ConfirmDialogComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    NewPasswordComponent
   ],
   imports: [
     BrowserModule,
