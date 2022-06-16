@@ -5,5 +5,6 @@ export class TextContent {
   content: string;
   isShared: boolean;
   tags: string[];
+  imageHref: string
 }
 

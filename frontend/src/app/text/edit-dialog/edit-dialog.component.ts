@@ -25,6 +25,7 @@ export class EditDialogComponent implements OnInit {
       title: ['', [Validators.required]],
       subtitle: ['', [Validators.required]],
       content: ['', [Validators.required]],
+      imageSource: []
     }
   )
 
@@ -42,6 +43,7 @@ export class EditDialogComponent implements OnInit {
       this.editForm.controls["title"].setValue(this.data.title)
       this.editForm.controls["subtitle"].setValue(this.data.subtitle)
       this.editForm.controls["content"].setValue(this.data.content)
+      this.editForm.controls["imageSource"].setValue(this.data.imageHref)
       this.selectedTags = this.data.tags
     }
 
@@ -77,6 +79,7 @@ export class EditDialogComponent implements OnInit {
     const title: string = this.editForm.get("title")?.value
     const subtitle: string = this.editForm.get("subtitle")?.value
     const content: string = this.editForm.get("content")?.value
+    const imageSource: string = this.editForm.get("imageSource")?.value
 
     let textContent: TextContent;
 
@@ -90,6 +93,9 @@ export class EditDialogComponent implements OnInit {
     textContent.subtitle = subtitle;
     textContent.content = content;
     textContent.tags = this.selectedTags
+    textContent.imageHref = imageSource
+
+    console.log(imageSource)
 
     if (this.data) {
       this.textContentService.putText(textContent).subscribe(

@@ -48,7 +48,7 @@ export class TextContentService {
   }
 
   getPublicText(id: number, token: string): Observable<TextContent> {
-    return this.http.get<TextContent>(`${environment.contentApiBaseUrl}/texts/${id}/?token=${token}`)
+    return this.http.get<TextContent>(`${environment.contentApiBaseUrl}/public/texts/${id}/?token=${token}`)
   }
 
   getAvailableTags(): Observable<Array<string>> {

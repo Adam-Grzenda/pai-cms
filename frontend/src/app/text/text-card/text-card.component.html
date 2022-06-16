@@ -1,4 +1,5 @@
 <mat-card class="mat-elevation-z2">
+
   <div class="header">
     <div>
       <mat-card-title>{{this.textContent.title}}</mat-card-title>
@@ -21,15 +22,20 @@
     </div>
   </div>
   <mat-card-content>
-    <p>{{this.textContent.content}}</p>
-    <p>
-      <mat-chip-list selectable="false">
-        <mat-chip *ngFor="let tag of this.textContent.tags">
-          {{tag}}
-        </mat-chip>
-      </mat-chip-list>
+    <div class="image-container" *ngIf="textContent.imageHref">
+      <img [src]="textContent.imageHref" alt="Invalid image URL" width="60px" height="60px">
+    </div>
+    <div>
+      <p>{{this.textContent.content}}</p>
+      <p>
+        <mat-chip-list selectable="false">
+          <mat-chip *ngFor="let tag of this.textContent.tags">
+            {{tag}}
+          </mat-chip>
+        </mat-chip-list>
+      </p>
+    </div>
 
-    </p>
   </mat-card-content>
 
 </mat-card>

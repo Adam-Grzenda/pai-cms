@@ -19,6 +19,15 @@
       </mat-form-field>
     </p>
     <p>
+      You can provide an optional image link
+    </p>
+    <p>
+      <mat-form-field id="imageSource">
+        <mat-label>Image URL</mat-label>
+        <input matInput formControlName="imageSource" placeholder="example.org/image.png">
+      </mat-form-field>
+    </p>
+    <p>
       <mat-chip-list #chipList selectable multiple>
         <mat-chip *ngFor="let tag of availableTags" #chip="matChip" [selected]="selectedTags.indexOf(chip.value) >= 0"
                   (click)="onClickChip(chip, chipList)">{{tag}}</mat-chip>
