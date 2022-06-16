@@ -95,7 +95,6 @@ export class EditDialogComponent implements OnInit {
     textContent.tags = this.selectedTags
     textContent.imageHref = imageSource
 
-    console.log(imageSource)
 
     if (this.data) {
       this.textContentService.putText(textContent).subscribe(

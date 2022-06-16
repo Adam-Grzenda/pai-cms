@@ -109,7 +109,6 @@ export class AccountComponent implements OnInit {
       )
     }
 
-    console.log(this.registrationForm.get("email")?.errors)
   }
 
 

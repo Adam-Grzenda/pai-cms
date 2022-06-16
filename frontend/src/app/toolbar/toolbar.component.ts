@@ -41,9 +41,6 @@ export class ToolbarComponent implements OnInit {
     let searchParam = this.route.snapshot.queryParamMap.get("search");
     this.inputValue = searchParam ?? ""
 
-    console.log(this.route.snapshot)
-
-
     this.textContentService.getAvailableTags().subscribe(
       result => this.availableTags = result
     )
