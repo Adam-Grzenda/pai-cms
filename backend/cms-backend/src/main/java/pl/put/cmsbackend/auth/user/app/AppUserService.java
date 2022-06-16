@@ -13,6 +13,7 @@ import pl.put.cmsbackend.auth.user.role.RoleService;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -22,14 +23,27 @@ public class AppUserService implements UserDetailsService {
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public AppUser registerUser(String email, String password) {    //TODO add password validation
-        Role role = roleService.getDefaultRole();
 
+    public AppUser registerUser(String email, String password) {
+        validateEmailAndPassword(email, password);
+
+        Role role = roleService.getDefaultRole();
         if (appUserRepository.findUserByEmail(email).isPresent()) {
             throw new UserRegistrationException("User with email: " + email + " already exists");
         }
 
         return appUserRepository.save(new AppUser(email, passwordEncoder.encode(password), List.of(role)));
+    }
+
+    private void validateEmailAndPassword(String email, String password) {
+        boolean emailValid = Pattern.compile("^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$")
+                .matcher(email)
+                .matches();
+        boolean passwordValid = password.length() > 8;
+
+        if (!emailValid || !passwordValid) {
+            throw new UserRegistrationException("Invalid email or password format");
+        }
     }
 
     public Optional<AppUser> findUserByEmail(String email) {
@@ -42,7 +56,9 @@ public class AppUserService implements UserDetailsService {
         AppUser appUser = this.appUserRepository.findUserByEmail(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username: " + username + "not found"));
 
-        return new org.springframework.security.core.userdetails.User(appUser.getEmail(), appUser.getPassword(),
-                appUser.getRoles().stream().map(role -> new SimpleGrantedAuthority(role.getName())).toList());
+        return new org.springframework.security.core.userdetails.User(appUser.getEmail(), appUser.getPassword(), appUser.getRoles()
+                .stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .toList());
     }
 }

@@ -1,12 +1,14 @@
 package pl.put.cmsbackend.auth.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.put.cmsbackend.auth.user.app.AppUserService;
 import pl.put.cmsbackend.auth.user.password.ForgottenPasswordService;
 import pl.put.cmsbackend.auth.user.password.PasswordResetDto;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.OK;
@@ -35,6 +37,11 @@ public class UserController {
     @ResponseStatus(OK)
     public void resetPassword(@PathVariable String resetPasswordToken, @RequestBody PasswordResetDto passwordResetDto) {
         forgottenPasswordService.handleResetPassword(passwordResetDto, resetPasswordToken);
+    }
+
+    @PostMapping("/user")
+    public ResponseEntity<Boolean> checkUserExisting(@RequestParam String email) {
+        return ResponseEntity.ok(appUserService.findUserByEmail(email).isPresent());
     }
 
 }

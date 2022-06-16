@@ -63,7 +63,7 @@ public class ForgottenPasswordService {
         AppUser appUser = appUserRepository.findUserByEmail(passwordResetDto.username())
                 .orElseThrow(() -> new UsernameNotFoundException(passwordResetDto.username()));
 
-        tokenService.verifyResetPasswordToken(appUser, token, EXPECTED_ISSUER);
+        tokenService. verifyResetPasswordToken(appUser, token, EXPECTED_ISSUER);
 
         appUser.setPassword(passwordEncoder.encode(passwordResetDto.password()));
         appUserRepository.save(appUser);
