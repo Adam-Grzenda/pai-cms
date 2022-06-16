@@ -39,6 +39,9 @@ export class MainFeedComponent implements OnInit {
     this.authService.authEvent.subscribe(
       _ => {
         this.loadTexts()
+        this.textContentService.getAvailableTags().subscribe(
+          result => this.availableTags = result
+        )
         this.router.navigate([""])
       }
     )
