@@ -15,8 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
-import static pl.put.cmsbackend.auth.config.WebSecurityConfig.LOGIN_URI;
-import static pl.put.cmsbackend.auth.config.WebSecurityConfig.REFRESH;
+import static pl.put.cmsbackend.auth.config.WebSecurityConfig.*;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -29,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
 
-        if (request.getServletPath().equals(LOGIN_URI) || request.getServletPath().equals(REFRESH)||authorizationHeader == null) {
+        if (request.getServletPath().equals(LOGIN_URI) || request.getServletPath().equals(REFRESH) || request.getServletPath().startsWith(PUBLIC_API) || authorizationHeader == null) {
             filterChain.doFilter(request, response);
             return;
         }

@@ -27,7 +27,7 @@ public class AuthExceptionControllerHandler extends ResponseEntityExceptionHandl
     @ExceptionHandler({ContentAccessPermissionException.class})
     private ResponseEntity<AuthErrorResponse> handleException(
             ContentAccessPermissionException contentAccessPermissionException) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new AuthErrorResponse("User not permitted to access resource"));
     }
 

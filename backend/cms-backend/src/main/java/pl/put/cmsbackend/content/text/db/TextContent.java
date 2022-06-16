@@ -41,6 +41,8 @@ public class TextContent {
     @Field(termVector = TermVector.YES, name = "content")
     private String content;
 
+    private String imageHref;
+
 
     @ElementCollection(targetClass = ContentTag.class)
     @CollectionTable
@@ -48,11 +50,12 @@ public class TextContent {
     @ContainedIn
     private Set<ContentTag> contentTags;
 
-    public TextContent(AppUser owner, String title, String subtitle, String content, Set<ContentTag> contentTags) {
+    public TextContent(AppUser owner, String title, String subtitle, String content, Set<ContentTag> contentTags, String imageHref) {
         this.owner = owner;
         this.title = title;
         this.subtitle = subtitle;
         this.content = content;
         this.contentTags = contentTags;
+        this.imageHref = imageHref;
     }
 }

@@ -35,6 +35,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public static final String LOGIN_URI = "/login";
     public static final String API_BASE = "/api/**";
     public static final String REFRESH = "/refresh";
+    public static final String PUBLIC_API = "/api/public/";
     private static final String CHECK_USER = "/user";
 
     private final UserDetailsService userService;
@@ -58,6 +59,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.exceptionHandling().authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
         http.authorizeRequests().antMatchers(REFRESH).permitAll();
         http.authorizeRequests().antMatchers(CHECK_USER).permitAll();
+        http.authorizeRequests().antMatchers(PUBLIC_API + "**").permitAll();
         http.authorizeRequests().antMatchers(API_BASE).authenticated();
         http.authorizeRequests().antMatchers(POST, API_BASE).hasAnyAuthority(DEFAULT_ROLE);
         http.authorizeRequests().antMatchers(GET, API_BASE).hasAnyAuthority(DEFAULT_ROLE);

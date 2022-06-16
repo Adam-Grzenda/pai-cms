@@ -7,6 +7,6 @@ import java.util.Set;
 
 public record TextContentDto(Long id, @NotBlank(message = "Title is mandatory") String title, String subtitle,
                              @NotBlank(message = "Content is mandatory") String content, Set<ContentTag> tags,
-                             Boolean isShared) {
+                             Boolean isShared, String imageHref) {
 
 }

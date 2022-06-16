@@ -31,7 +31,7 @@ public class TextContentService {
                 .orElseThrow(() -> new UserNotFoundException("User with email: " + email + " not found"));
         validateTitle(email, textContent.title());
 
-        TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content(), textContent.tags());
+        TextContent content = new TextContent(user, textContent.title(), textContent.subtitle(), textContent.content(), textContent.tags(), textContent.imageHref());
         TextContent savedContent = contentRepository.save(content);
 
         return mapContentToContentDto(savedContent);
@@ -63,6 +63,7 @@ public class TextContentService {
         }
         content.setContent(updateContent.content());
         content.setSubtitle(updateContent.subtitle());
+        content.setImageHref(updateContent.imageHref());
 
         TextContent savedContent = contentRepository.save(content);
         return mapContentToContentDto(savedContent);
@@ -85,6 +86,10 @@ public class TextContentService {
 
     public TextContentDto getPublicTextById(Long id) {
         TextContent content = contentRepository.findById(id).orElseThrow(() -> new TextContentNotFound(id));
+
+        if (!content.isShared()) {
+            throw new ContentAccessPermissionException("Content is not shared publicly");
+        }
         return mapContentToContentDto(content);
     }
 

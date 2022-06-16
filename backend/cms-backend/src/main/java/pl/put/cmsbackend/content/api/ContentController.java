@@ -37,7 +37,7 @@ public class ContentController {
         return textContentService.getTextContent(username);
     }
 
-    @GetMapping("/texts/{id}")
+    @GetMapping("/public/texts/{id}")
     public TextContentDto getPublicTextById(@PathVariable Long id, @RequestParam String token) {
         tokenService.verifyContentToken(token, id);
         return textContentService.getPublicTextById(id);
