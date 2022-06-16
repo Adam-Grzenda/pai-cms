@@ -98,7 +98,10 @@ export class EditDialogComponent implements OnInit {
             this.dialogRef.close()
             this.textContentService.textContentEvent.emit()
           },
-          error: _ => this.toastService.showUnexpectedError()
+          error: error => {
+            this.toastService.showError(error.error.message)
+            this.textContentService.textContentEvent.emit()
+          }
         }
       )
     } else {
@@ -108,7 +111,10 @@ export class EditDialogComponent implements OnInit {
             this.dialogRef.close()
             this.textContentService.textContentEvent.emit()
           },
-          error: _ => this.toastService.showUnexpectedError()
+          error: error => {
+            this.toastService.showError(error.error.message)
+            this.textContentService.textContentEvent.emit()
+          }
         }
       )
     }
